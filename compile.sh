@@ -1,6 +1,7 @@
 #!/bin/bash
+TARGET=$1
 mkdir -p build
 cd build 
 cmake ..
-make 
+make $TARGET
 cd ..

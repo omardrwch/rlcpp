@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_CXX_STANDARD 14)
-project(myproject)
+project(RLCPP)
 
 # enable warnings 
 # (see https://cmake.org/cmake/help/latest/command/add_compile_options.html)
 # add_compile_options(-Wall)
 
 # enable_testing()
-add_subdirectory(app)
-add_subdirectory(lib)
+add_subdirectory(rlcpp)
+add_subdirectory(experiments)
 add_subdirectory(test)
 
 

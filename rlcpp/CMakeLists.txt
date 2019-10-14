@@ -1,8 +1,8 @@
 set(CMAKE_BUILD_TYPE Debug)  # Debug or Release. Used for libraries
 
 # Include headers
-include_directories("include/sublib1"
-                    "include/sublib2")
+include_directories("include/mdp"
+                    "include/online")
 
 # Adding sources manually
 # set(SOURCES src/mainapp.cpp src/student.cpp)
@@ -12,4 +12,4 @@ include_directories("include/sublib1"
 file(GLOB SOURCES "src/*/*.cpp")
 
 # Generate shared library from the code
-add_library(mylib SHARED ${SOURCES})
+add_library(rlcpp SHARED ${SOURCES})

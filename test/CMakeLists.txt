@@ -1,13 +1,11 @@
-link_directories(${myproject_SOURCE_DIR}/lib/src/sublib1)
-link_directories(${myproject_SOURCE_DIR}/lib/src/sublib2)
+link_directories(${RLCPP_SOURCE_DIR}/rlcpp/src/mdp 
+                 ${RLCPP_SOURCE_DIR}/rlcpp/src/online)
 
-include_directories(${myproject_SOURCE_DIR}/lib/include/sublib1)
-include_directories(${myproject_SOURCE_DIR}/lib/include/sublib2)
-
+include_directories(${RLCPP_SOURCE_DIR}/rlcpp/include/mdp
+                    ${RLCPP_SOURCE_DIR}/rlcpp/include/online)
 # testing files
-add_executable(unit_tests sum_test.cpp
-                          mult_test.cpp)
-target_link_libraries(unit_tests mylib)
+add_executable(unit_tests space_test.cpp)
+target_link_libraries(unit_tests rlcpp)
 
 
 # - add_test() is not necessary when running ./unit_tests
