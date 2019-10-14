@@ -51,6 +51,7 @@ int main(void)
 
     // std::cout<<"Contains test = "<<box.contains(test)<< "\n" ;
 
+    std::cout<<"I'm here \n";
 
     return 0;
 
