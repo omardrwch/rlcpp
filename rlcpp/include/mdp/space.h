@@ -11,6 +11,12 @@
 
 namespace spaces
 {
+
+    /**
+     * @brief Possible space names.
+     */
+    enum spc_name {undefined, discrete, box}; 
+
     /**
      * @brief Base class for observation and action spaces.
      * 
@@ -31,6 +37,11 @@ namespace spaces
          * @param x 
          */
         virtual bool contains(T x)=0;
+
+        /**
+         * Name of the space (discrete, box, etc.)
+         */
+        spc_name name = undefined; 
     };
 
 
@@ -54,6 +65,8 @@ namespace spaces
 
         int sample();
         bool contains(int x);
+
+        spc_name name = discrete;
     };
 
 
@@ -73,6 +86,7 @@ namespace spaces
         // Methods of base class
         std::vector<double> sample();
         bool contains(std::vector<double> x);
+        spc_name name = box;
 
         // Attributes
 
