@@ -1,8 +1,8 @@
 #ifndef __SPACE_H__
 #define __SPACE_H__
 
-#include <array>
-
+#include <vector>
+#include <assert.h> 
 
 /**
  * @file
@@ -60,66 +60,36 @@ namespace spaces
     /**
      * @brief Class for box spaces in R^n
      */
-    template<int SIZE>
-    class Box: public Space<std::array<double, SIZE>>
+    class Box: public Space<std::vector<double>>
     {
     public:
         /**
          * @param box_low: array contaning the lower bounds of the box
          * @param box_high: array containing the upper bounds of the box
          */
-        Box(std::array<double, SIZE> box_low, std::array<double, SIZE> box_high);
+        Box(std::vector<double>box_low, std::vector<double> box_high);
         ~Box(){};
 
         // Methods of base class
-        std::array<double, SIZE> sample();
-        bool contains(std::array<double, SIZE> x);
+        std::vector<double> sample();
+        bool contains(std::vector<double> x);
 
         // Attributes
 
         /**
          * Size of the fox
          */
-        int size = SIZE; 
+        int size; 
 
         /**
          * lower bounds of the box
          */
-        std::array<double, SIZE> low;
+        std::vector<double> low;
 
         /**
          * upper bounds of the box
          */
-        std::array<double, SIZE> high;
+        std::vector<double> high;
     };
-
-    /*
-    Members of Box
-    */
-
-    template<int SIZE>
-    Box<SIZE>::Box(std::array<double, SIZE> box_low, std::array<double, SIZE> box_high)
-    {
-        low = box_low;
-        high = box_high;
-    }    
-
-    template<int SIZE>
-    bool Box<SIZE>::contains(std::array<double, SIZE> x)
-    {
-        bool contains = true;
-        for(int i = 0; i < x.size(); i++)
-        {
-            contains = contains && (x[i] >= low[i] && x[i] <= high[i]);
-        }
-        return contains;
-    }
-
-    template<int SIZE>
-    std::array<double, SIZE> Box<SIZE>::sample()
-    {
-        std::array<double, SIZE> temp; 
-        return temp;
-    }
 }
 #endif
