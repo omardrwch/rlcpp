@@ -1,15 +1,10 @@
-#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "space.h"
-#include <stdlib.h>
 #include <vector>
 
 
 TEST_CASE( "Testing discrete spaces", "[discrete_space]" )
 {
-    // set seed
-    srand(42);
-
     spaces::Discrete space(5);
     REQUIRE( space.n == 5 );
     REQUIRE( space.contains(0) );
@@ -26,9 +21,6 @@ TEST_CASE( "Testing discrete spaces", "[discrete_space]" )
 
 TEST_CASE( "Testing box spaces", "[box_space]")
 {
-    // set seed
-    srand(42);
-
     std::vector<double> low = {-1, -2, -3, -4, -5};
     std::vector<double> high = {1, 10, 20, 30, 100};
 

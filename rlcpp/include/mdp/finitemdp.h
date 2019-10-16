@@ -6,23 +6,26 @@
  * @brief Base class for finite MDPs.
  */
 
+#include "mdp.h"
 
-class FiniteMDP
+namespace mdp
 {
-private:
-    /* data */
-public:
-    FiniteMDP(/* args */);
-    ~FiniteMDP();
-};
+   class FiniteMDP: public MDP<int, int>
+    {
+    public:
+        FiniteMDP(/* args */);
+        ~FiniteMDP();
+    };
 
-FiniteMDP::FiniteMDP(/* args */)
-{
+    FiniteMDP::FiniteMDP(/* args */)
+    {
+    }
+
+    FiniteMDP::~FiniteMDP()
+    {
+    }
 }
 
-FiniteMDP::~FiniteMDP()
-{
-}
 
 
 #endif

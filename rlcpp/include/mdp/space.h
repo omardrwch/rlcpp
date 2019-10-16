@@ -2,7 +2,7 @@
 #define __SPACE_H__
 
 #include <vector>
-#include <assert.h> 
+#include <random>
 
 /**
  * @file
@@ -42,6 +42,11 @@ namespace spaces
          * Name of the space (discrete, box, etc.)
          */
         spc_name name = undefined; 
+
+        /**
+         * Random number generator
+         */
+        std::mt19937 generator;
     };
 
 
@@ -56,6 +61,12 @@ namespace spaces
          * @param num: Value of n
          */
         Discrete(int num);
+
+        /**
+         * @param num: Value of n
+         * @param _seed: seed for random number generation
+         */
+        Discrete(int num, unsigned _seed);
         ~Discrete(){};
 
         /**
@@ -81,6 +92,13 @@ namespace spaces
          * @param box_high: array containing the upper bounds of the box
          */
         Box(std::vector<double>box_low, std::vector<double> box_high);
+
+        /**
+         * @param box_low: array contaning the lower bounds of the box
+         * @param box_high: array containing the upper bounds of the box
+         * @param _seed: seed for random number generation
+         */
+        Box(std::vector<double>box_low, std::vector<double> box_high, unsigned _seed);
         ~Box(){};
 
         // Methods of base class
@@ -104,6 +122,11 @@ namespace spaces
          * upper bounds of the box
          */
         std::vector<double> high;
+
+        /**
+         * Default seed
+         */
+        unsigned default_seed = 42;
     };
 }
 #endif

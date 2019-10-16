@@ -3,7 +3,8 @@ set(CMAKE_BUILD_TYPE Debug)  # Debug or Release. Used for libraries
 # Include headers
 include_directories("include"
                     "include/mdp"
-                    "include/online")
+                    "include/online"
+                    "include/utils")
 
 # Adding sources manually
 # set(SOURCES src/mainapp.cpp src/student.cpp)

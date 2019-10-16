@@ -1,8 +1,10 @@
 link_directories(${RLCPP_SOURCE_DIR}/rlcpp/src/mdp 
-                 ${RLCPP_SOURCE_DIR}/rlcpp/src/online)
+                 ${RLCPP_SOURCE_DIR}/rlcpp/src/online
+                 ${RLCPP_SOURCE_DIR}/rlcpp/src/utils)
 
 include_directories(${RLCPP_SOURCE_DIR}/rlcpp/include/mdp
-                    ${RLCPP_SOURCE_DIR}/rlcpp/include/online)
+                    ${RLCPP_SOURCE_DIR}/rlcpp/include/online
+                    ${RLCPP_SOURCE_DIR}/rlcpp/include/utils)
 
 
 add_executable(debug debug/debug_mdp.cpp)

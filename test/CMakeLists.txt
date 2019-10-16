@@ -1,10 +1,15 @@
 link_directories(${RLCPP_SOURCE_DIR}/rlcpp/src/mdp 
-                 ${RLCPP_SOURCE_DIR}/rlcpp/src/online)
+                 ${RLCPP_SOURCE_DIR}/rlcpp/src/online
+                 ${RLCPP_SOURCE_DIR}/rlcpp/src/utils)
 
 include_directories(${RLCPP_SOURCE_DIR}/rlcpp/include/mdp
-                    ${RLCPP_SOURCE_DIR}/rlcpp/include/online)
+                    ${RLCPP_SOURCE_DIR}/rlcpp/include/online
+                    ${RLCPP_SOURCE_DIR}/rlcpp/include/utils)
 # testing files
-add_executable(unit_tests space_test.cpp)
+add_executable(unit_tests main.cpp
+                          space_test.cpp
+                          random_test.cpp
+                          vector_op_test.cpp)
 target_link_libraries(unit_tests rlcpp)
 
 

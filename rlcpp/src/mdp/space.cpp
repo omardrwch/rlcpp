@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <random>
+#include <assert.h> 
 #include "space.h"
+
 
 namespace spaces
 {
@@ -12,6 +14,12 @@ namespace spaces
         n = num;
     }
 
+    Discrete::Discrete(int num, unsigned _seed)
+    {
+        n = num;
+        generator.seed(_seed);
+    }
+
     bool Discrete::contains(int x)
     {
         return (x >= 0 && x < n);
@@ -19,7 +27,8 @@ namespace spaces
 
     int Discrete::sample()
     {
-        return rand() % n;
+        std::uniform_int_distribution<int> distribution(0,n-1);
+        return distribution(generator);
     }
 
 
@@ -31,6 +40,16 @@ namespace spaces
         low = box_low;
         high = box_high;
         size = box_low.size();
+        generator.seed(default_seed);
+        assert(size == box_high.size() && "The size of box_low and box_high must be the same.");
+    }    
+
+    Box::Box(std::vector<double> box_low, std::vector<double> box_high, unsigned _seed)
+    {
+        low = box_low;
+        high = box_high;
+        size = box_low.size();
+        generator.seed(_seed);
         assert(size == box_high.size() && "The size of box_low and box_high must be the same.");
     }    
 
@@ -50,8 +69,7 @@ namespace spaces
 
     std::vector<double> Box::sample()
     {
-        // random number generator
-        std::default_random_engine generator;
+        // uniform real distribution
         std::uniform_real_distribution<double> distribution(0.0,1.0);
 
         std::vector<double> sampled_state(size);
