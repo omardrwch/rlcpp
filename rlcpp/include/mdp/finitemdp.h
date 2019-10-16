@@ -4,9 +4,11 @@
 /**
  * @file
  * @brief Base class for finite MDPs.
+ * @TODO define attributes for observation and action spaces.
  */
 
 #include <vector>
+#include <assert.h> 
 #include "mdp.h"
 #include "utils.h"
 
@@ -40,6 +42,16 @@ namespace mdp
          */
         utils::Random randgen;
 
+        /**
+         * Number of states
+         */
+        int ns;
+
+        /**
+         * Number of actions;
+         */
+        int na;
+
         // Members of base class
         int state;
         std::string id; 
@@ -53,6 +65,11 @@ namespace mdp
         transitions = _transitions;
         randgen.set_seed(_seed);
         id = "FiniteMDP";
+
+        ns = _mean_rewards.size();
+        assert( ns > 0 && "At least one state is required.");
+        na = _mean_rewards[0].size();
+
         reset();
     }
 

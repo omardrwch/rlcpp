@@ -1,10 +1,12 @@
 # Reinforcement Learning library in C++
 
-## Contents
+## Documentation
 
-### MDP
+To view the documentation, run
 
-* space (abstract classs for observation and action spaces)
-  * discrete
-* mdp (abstract class for MDPs)
-  * finitemdp
+```
+doxygen Doxyfile
+```
+
+and open the file `docs/html/index.html`.
+

@@ -8,7 +8,7 @@
 int main(void)
 {
     utils::vec_2d mat; 
-    int n = 5;
+    int n = 4;
     int m = 5;
     for(int i = 0; i < n; i++)
     {
@@ -26,6 +26,10 @@ int main(void)
     {
         utils::printvec(lala[i]);
     }
+
+    std::cout << lala.size() << std::endl;
+    std::cout << lala[0].size() << std::endl;
+
 
     return 0;
 
