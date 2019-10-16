@@ -1,4 +1,4 @@
-# Reinforcement Learning library in C++
+# Reinforcement Learning library in C++ (under construction)
 
 ## Documentation
 
