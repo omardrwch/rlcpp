@@ -4,9 +4,16 @@
 
 namespace utils
 {
-    Random::Random(unsigned _seed)
+    Random::Random(unsigned _seed /* = 42 */)
     {
         seed = _seed;
+        generator.seed(_seed);
+    }
+
+    void Random::set_seed(unsigned _seed)
+    {
+        seed = _seed;
+        generator.seed(_seed);
     }
 
     int Random::choice(std::vector<double> prob, double u /* = -1 */)

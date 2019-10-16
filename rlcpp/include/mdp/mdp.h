@@ -9,6 +9,10 @@
  * @brief Contains abstract class for MDPs
  */
 
+
+/**
+ * @brief Definitions for Markov Decision Processes
+ */
 namespace mdp
 {
     /**
@@ -59,7 +63,7 @@ namespace mdp
          * @brief Put MDP in default state
          * @return Default state
          */
-        S reset()=0;
+        virtual S reset()=0;
 
         /**
          * @brief Take a step in the MDP
@@ -67,7 +71,12 @@ namespace mdp
          * @return An instance of mdp::StepResult containing the next state,
          * the reward and the done flag.
          */
-        StepResult<S> step(A action)=0;
+        virtual StepResult<S> step(A action)=0;
+
+        /**
+         * Current state
+         */
+        S state; 
 
         /**
          *  MDP identifier

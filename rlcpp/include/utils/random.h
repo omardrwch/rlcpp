@@ -14,7 +14,7 @@ namespace utils
     class Random
     {
     public:
-        Random(unsigned _seed);
+        Random(unsigned _seed = 42);
         ~Random(){};
 
         /**
@@ -22,6 +22,12 @@ namespace utils
          */
         unsigned seed;
 
+        /**
+         * @brief Set seed for random number generator
+         * @param _seed
+         */
+        void set_seed(unsigned _seed);
+        
         /**
          * Random number generator
          */

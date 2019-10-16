@@ -9,6 +9,9 @@
  * @brief Classes for definining observation and action spaces.
  */
 
+/**
+ * @brief Definitions for observation and action spaces.
+ */
 namespace spaces
 {
 
