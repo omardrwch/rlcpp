@@ -6,6 +6,7 @@
 #include <iostream>
 #include "mdp.h"
 #include "finitemdp.h"
+#include "chain.h"
 #include "utils.h"
 
 using namespace std;
@@ -13,48 +14,9 @@ using namespace std;
 int main(void)
 {
     /*   Defining a simple MDP with 3 states and 2 actions  */    
-    int ns = 3;
-    int na = 2;
 
-    utils::vec_3d transitions; 
-    utils::vec_3d rewards; 
-    std::vector<int> terminal_states = {2};
+    mdp::Chain mdp(3);
 
-    for(int s = 0; s < ns; s++)
-    {
-        transitions.push_back(std::vector<std::vector<double>>());
-        rewards.push_back(std::vector<std::vector<double>>());
-        for(int a = 0; a < na; a++)
-        {
-            transitions[s].push_back(std::vector<double>());
-            rewards[s].push_back(std::vector<double>());
-            for(int next_s = 0; next_s < ns; next_s++)
-            {
-                double prob = 0;
-                double reward = 0;
-                // First action
-                if (a == 0)
-                {
-                    if(s == 0 && next_s == 1) prob = 1.0;
-                    if(s == 1 && next_s == 2) {prob = 1.0; reward = 1.0;}
-                    if(s == 2 && next_s == 2) prob = 1.0; 
-                 }
-                // Second action
-                if (a == 1)
-                {
-                    if(s == 0 && next_s == 0) prob = 1.0;
-                    if(s == 1 && next_s == 0) prob = 1.0;
-                    if(s == 2 && next_s == 2) prob = 1.0;
-                 }
-                transitions[s][a].push_back(prob);
-                rewards[s][a].push_back(reward);
-            }
-            // utils::printvec(rewards[s][a]);
-        }
-    }       
-
-
-    mdp::FiniteMDP mdp(rewards, transitions, terminal_states);
     for(int i = 0; i < 100; i++)
     {
         int state = mdp.state;
