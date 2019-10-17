@@ -22,6 +22,7 @@ namespace mdp
     class StepResult
     {
     public:
+        StepResult(); // default constructor
         StepResult(S _next_state, double _reward, bool _done);
         ~StepResult(){};
 
@@ -41,6 +42,14 @@ namespace mdp
         bool done;
     };
     
+    template<typename S>
+    StepResult<S>::StepResult()
+    {
+        next_state = -1;
+        reward = 0;
+        done = false;
+    }
+
     template<typename S>
     StepResult<S>::StepResult(S _next_state, double _reward, bool _done)
     {

@@ -4,7 +4,7 @@
 /**
  * @file
  * @brief Base class for finite MDPs.
- * @TODO define attributes for observation and action spaces.
+ * @TODO implement terminal states
  */
 
 #include <vector>
@@ -18,11 +18,13 @@ namespace mdp
     {
     public:
         /**
+         * @note The _seed is used for generating the transitions. The state and action spaces have their own (default) seeds.
          * @param _mean_rewards
          * @param _transitions
          * @param _seed random seed
+         * @param _default_state index of the default state
          */
-        FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, unsigned _seed = 42);
+        FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
         ~FiniteMDP(){};
 
         /**
@@ -36,6 +38,11 @@ namespace mdp
          * state s' by taking action a in state s.
          */
         utils::vec_3d transitions;
+
+        /**
+         * Default state
+         */
+        int default_state;
 
         /**
          * For random number generation
@@ -52,41 +59,22 @@ namespace mdp
          */
         int na;
 
+        /**
+         * State (observation) space
+         */ 
+        spaces::Discrete observation_space;
+
+        /**
+         *  Action space
+         */
+
+        spaces::Discrete action_space;
+
         // Members of base class
         int state;
         std::string id; 
         int reset();
         StepResult<int> step(int action);
     };  
-
-    FiniteMDP::FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, unsigned _seed /* = 42 */)
-    {
-        mean_rewards = _mean_rewards;
-        transitions = _transitions;
-        randgen.set_seed(_seed);
-        id = "FiniteMDP";
-
-        ns = _mean_rewards.size();
-        assert( ns > 0 && "At least one state is required.");
-        na = _mean_rewards[0].size();
-
-        reset();
-    }
-
-    int FiniteMDP::reset()
-    {
-        state = 0;
-        return 0;
-    }
-
-    StepResult<int> FiniteMDP::step(int action)
-    {
-        // Sample next state
-        int next_state = randgen.choice(transitions[state][action]);
-        double reward = mean_rewards[state][action][next_state];
-        bool done = false;
-        StepResult<int> step(next_state, reward, done);
-        return step;
-    }
 }
 #endif

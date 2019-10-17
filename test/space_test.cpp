@@ -6,6 +6,7 @@
 TEST_CASE( "Testing discrete spaces", "[discrete_space]" )
 {
     spaces::Discrete space(5);
+    REQUIRE( space.name == spaces::discrete);
     REQUIRE( space.n == 5 );
     REQUIRE( space.contains(0) );
     REQUIRE( space.contains(4) );
@@ -29,6 +30,7 @@ TEST_CASE( "Testing box spaces", "[box_space]")
 
     spaces::Box space(low, high);
 
+    REQUIRE( space.name == spaces::box);
     REQUIRE( space.contains(valid) );
     REQUIRE( !space.contains(not_valid) );
 

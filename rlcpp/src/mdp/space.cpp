@@ -9,15 +9,21 @@ namespace spaces
     /*
     Members of Discrete
     */ 
-    Discrete::Discrete(int num)
+
+   Discrete::Discrete()
+   {
+       n = 0;
+   }
+
+    Discrete::Discrete(int _n, unsigned _seed /* = 42 */) 
     {
-        n = num;
+        n = _n;
+        generator.seed(_seed);
     }
 
-    Discrete::Discrete(int num, unsigned _seed)
+    void Discrete::set_n(int _n)
     {
-        n = num;
-        generator.seed(_seed);
+        n = _n;
     }
 
     bool Discrete::contains(int x)
@@ -35,23 +41,25 @@ namespace spaces
     /*
     Members of Box
     */
-    Box::Box(std::vector<double> box_low, std::vector<double> box_high)
+    Box::Box()
     {
-        low = box_low;
-        high = box_high;
-        size = box_low.size();
-        generator.seed(default_seed);
-        assert(size == box_high.size() && "The size of box_low and box_high must be the same.");
+        // Do nothing. low and high are empty vectors.
+    }
+
+    Box::Box(std::vector<double> _low, std::vector<double> _high, unsigned _seed /* = 42 */)
+    {
+        low = _low;
+        high = _high;
+        size = _low.size();
+        generator.seed(_seed);
+        assert(size == _high.size() && "The size of _low and _high must be the same.");
     }    
 
-    Box::Box(std::vector<double> box_low, std::vector<double> box_high, unsigned _seed)
+    void Box::set_bounds(std::vector<double> _low, std::vector<double> _high)
     {
-        low = box_low;
-        high = box_high;
-        size = box_low.size();
-        generator.seed(_seed);
-        assert(size == box_high.size() && "The size of box_low and box_high must be the same.");
-    }    
+        low = _low; 
+        high = _high;
+    }
 
     bool Box::contains(std::vector<double> x)
     {

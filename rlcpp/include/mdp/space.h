@@ -60,16 +60,17 @@ namespace spaces
     class Discrete: public Space<int>
     {
     public:
-        /**
-         * @param num: Value of n
-         */
-        Discrete(int num);
 
         /**
-         * @param num: Value of n
-         * @param _seed: seed for random number generation
+         * @brief Default constructor
          */
-        Discrete(int num, unsigned _seed);
+        Discrete();
+
+        /**
+         * @param _n: Value of n
+         * @param _seed: seed for random number generation (default = 42)
+         */
+        Discrete(int _n, unsigned _seed = 42);
         ~Discrete(){};
 
         /**
@@ -77,9 +78,18 @@ namespace spaces
          */
         int n; 
 
+        // Methods
+
+        /**
+         * @brief Set the value of n, that defines the discrete space {0, ..., n-1}
+         */
+        void set_n(int _n);
+
+        // Methods of base class
         int sample();
         bool contains(int x);
 
+        // Name of the space
         spc_name name = discrete;
     };
 
@@ -90,23 +100,33 @@ namespace spaces
     class Box: public Space<std::vector<double>>
     {
     public:
-        /**
-         * @param box_low: array contaning the lower bounds of the box
-         * @param box_high: array containing the upper bounds of the box
-         */
-        Box(std::vector<double>box_low, std::vector<double> box_high);
 
         /**
-         * @param box_low: array contaning the lower bounds of the box
-         * @param box_high: array containing the upper bounds of the box
-         * @param _seed: seed for random number generation
+         * @brief Default constructor
          */
-        Box(std::vector<double>box_low, std::vector<double> box_high, unsigned _seed);
+        Box();
+
+        /**
+         * @param _low: array contaning the lower bounds of the box
+         * @param _high: array containing the upper bounds of the box
+         * @param _seed: seed for random number generation (default = 42)
+         */
+        Box(std::vector<double> _low, std::vector<double> _high, unsigned _seed = 42);
         ~Box(){};
+
+        // Methods
+        /**
+         * @brief Define the lower and upper bounds of the box
+         * @param _low: array contaning the lower bounds of the box
+         * @param _high: array containing the upper bounds of the box
+         */ 
+        void set_bounds(std::vector<double> _low, std::vector<double> _high);
 
         // Methods of base class
         std::vector<double> sample();
         bool contains(std::vector<double> x);
+
+        // Name of the space
         spc_name name = box;
 
         // Attributes
@@ -125,11 +145,6 @@ namespace spaces
          * upper bounds of the box
          */
         std::vector<double> high;
-
-        /**
-         * Default seed
-         */
-        unsigned default_seed = 42;
     };
 }
 #endif

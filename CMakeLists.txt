@@ -8,7 +8,7 @@ project(RLCPP)
 
 # enable_testing()
 add_subdirectory(rlcpp)
-add_subdirectory(experiments)
+add_subdirectory(examples)
 add_subdirectory(test)
 
 
