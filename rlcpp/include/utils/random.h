@@ -11,6 +11,9 @@
 
 namespace utils
 {
+    /**
+     * @brief Class for random number generation.
+     */
     class Random
     {
     public:

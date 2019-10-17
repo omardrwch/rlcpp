@@ -48,6 +48,23 @@ namespace utils
      * @param vec
      */
     void printvec(std::vector<double> vec);
+
+    /**
+     * @brief Get 2d vector of doubles of dimensions (dim1, dim2) filled with zeros
+     * @param dim1
+     * @param dim2
+     * @return vec_2d with dimensions (dim1, dim2)
+     */
+    vec_2d get_zeros_2d(int dim1, int dim2);
+
+    /**
+     * @brief Get 3d vector of doubles of dimensions (dim1, dim2, dim3) filled with zeros
+     * @param dim1
+     * @param dim2
+     * @param dim3
+     * @return vec_3d with dimensions (dim1, dim2, dim3)
+     */
+    vec_3d get_zeros_3d(int dim1, int dim2, int dim3);
 }
 
 #endif

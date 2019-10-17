@@ -56,4 +56,30 @@ namespace utils
         }   
         std::cout << "}" << std::endl;
     }
+
+    vec_2d get_zeros_2d(int dim1, int dim2, int dim3)
+    {
+        utils::vec_2d vector;
+        for(int ii = 0; ii < dim1; ii++)
+        {   
+            vector.push_back(std::vector<double>());
+            for(int jj = 0; jj < dim2; jj++) vector[ii].push_back(0.0);
+        }   
+        return vector;
+    }
+
+    vec_3d get_zeros_3d(int dim1, int dim2, int dim3)
+    {
+        utils::vec_3d vector;
+        for(int ii = 0; ii < dim1; ii++)
+        {   
+            vector.push_back(std::vector<std::vector<double>>());
+            for(int jj = 0; jj < dim2; jj++)
+            {
+                vector[ii].push_back(std::vector<double>());
+                for(int kk = 0; kk < dim3; kk++) vector[ii][jj].push_back(0.0);
+            }
+        }   
+        return vector;
+    }
 }

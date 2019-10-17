@@ -16,16 +16,17 @@ int main(void)
     int ns = 3;
     int na = 2;
 
-    utils::vec_3d transisions; 
+    utils::vec_3d transitions; 
     utils::vec_3d rewards; 
+    std::vector<int> terminal_states = {2};
 
     for(int s = 0; s < ns; s++)
     {
-        transisions.push_back(std::vector<std::vector<double>>());
+        transitions.push_back(std::vector<std::vector<double>>());
         rewards.push_back(std::vector<std::vector<double>>());
         for(int a = 0; a < na; a++)
         {
-            transisions[s].push_back(std::vector<double>());
+            transitions[s].push_back(std::vector<double>());
             rewards[s].push_back(std::vector<double>());
             for(int next_s = 0; next_s < ns; next_s++)
             {
@@ -35,17 +36,17 @@ int main(void)
                 if (a == 0)
                 {
                     if(s == 0 && next_s == 1) prob = 1.0;
-                    if(s == 1 && next_s == 2) prob = 1.0;
-                    if(s == 2 && next_s == 2) {prob = 1.0; reward = 1.0;}
+                    if(s == 1 && next_s == 2) {prob = 1.0; reward = 1.0;}
+                    if(s == 2 && next_s == 2) prob = 1.0; 
                  }
                 // Second action
                 if (a == 1)
                 {
                     if(s == 0 && next_s == 0) prob = 1.0;
                     if(s == 1 && next_s == 0) prob = 1.0;
-                    if(s == 2 && next_s == 2) {prob = 1.0; reward = 1.0;}
+                    if(s == 2 && next_s == 2) prob = 1.0;
                  }
-                transisions[s][a].push_back(prob);
+                transitions[s][a].push_back(prob);
                 rewards[s][a].push_back(reward);
             }
             // utils::printvec(rewards[s][a]);
@@ -53,17 +54,24 @@ int main(void)
     }       
 
 
-    mdp::FiniteMDP mdp(rewards, transisions);
-    for(int i = 0; i < 5; i++)
+    mdp::FiniteMDP mdp(rewards, transitions, terminal_states);
+    for(int i = 0; i < 100; i++)
     {
-        cout << "state = " << mdp.state << " | ";
+        int state = mdp.state;
         int action = mdp.action_space.sample();
-        cout << "action = " << action << " | ";
 
         mdp::StepResult<int> step_result = mdp.step(action);
 
+        cout << "action = " << action << " | ";
+        cout << "state = " << state << " | ";
         cout << "next state = " << step_result.next_state << " | ";
+        cout << "done    = " << step_result.done << " | ";
         cout << "reward    = " << step_result.reward << endl;
+
+        if (step_result.done)
+        {
+            break;
+        }
     }
 
     return 0;
