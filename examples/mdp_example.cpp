@@ -54,7 +54,7 @@ int main(void)
 
 
     mdp::FiniteMDP mdp(rewards, transisions);
-    for(int i = 0; i < 100; i++)
+    for(int i = 0; i < 5; i++)
     {
         cout << "state = " << mdp.state << " | ";
         int action = mdp.action_space.sample();

@@ -7,7 +7,7 @@ include_directories(${RLCPP_SOURCE_DIR}/rlcpp/include/mdp
                     ${RLCPP_SOURCE_DIR}/rlcpp/include/utils)
 
 
-add_executable(debug debug/debug_mdp.cpp)
+add_executable(debug debug.cpp)
 target_link_libraries(debug rlcpp)
 
 add_executable(mdp_example mdp_example.cpp)
