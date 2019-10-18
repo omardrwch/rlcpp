@@ -10,9 +10,6 @@
  */
 
 
-/**
- * @brief Definitions for Markov Decision Processes
- */
 namespace mdp
 {
     /**

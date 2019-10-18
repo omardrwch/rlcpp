@@ -6,4 +6,14 @@
 #include "chain.h"
 #include "space.h"
 
+/**
+ * @file Gather all mdp headers.
+ */
+
+
+/**
+ * @brief Definitions for Markov Decision Processes
+ */
+namespace mdp{}
+
 #endif

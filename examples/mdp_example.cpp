@@ -13,29 +13,30 @@ int main(void)
 {
     /*   Defining a simple MDP with 3 states and 2 actions  */    
 
-    mdp::Chain mdp(3);
+    mdp::Chain mdp(20);
 
 
     cout << mdp.id << endl << endl; 
 
-    for(int i = 0; i < 100; i++)
+    int max_t = 15;
+    mdp.history.reserve_mem(max_t);
+
+    for(int i = 0; i < max_t; i++)
     {
         int state = mdp.state;
         int action = mdp.action_space.sample();
 
+        // take step
         mdp::StepResult<int> step_result = mdp.step(action);
 
-        cout << "action = " << action << " | ";
-        cout << "state = " << state << " | ";
-        cout << "next state = " << step_result.next_state << " | ";
-        cout << "done    = " << step_result.done << " | ";
-        cout << "reward    = " << step_result.reward << endl;
+        // append to history
+        mdp.history.append(state, action, step_result.reward, step_result.next_state);
 
-        if (step_result.done)
-        {
-            break;
-        }
+        if (step_result.done) break;
     }
+
+    // print history
+    mdp.history.print(max_t);
 
     return 0;
 }

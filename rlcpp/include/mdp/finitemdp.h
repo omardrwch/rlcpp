@@ -10,6 +10,7 @@
 #include <assert.h> 
 #include "abstractmdp.h"
 #include "utils.h"
+#include "history.h"
 
 namespace mdp
 {
@@ -22,6 +23,7 @@ namespace mdp
         FiniteMDP(){};
 
         /**
+         * @brief Constructor *without* terminal states.
          * @param _mean_rewards
          * @param _transitions
          * @param _default_state index of the default state
@@ -30,6 +32,7 @@ namespace mdp
         void set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
 
         /**
+         * @brief Constructor *with* terminal states.
          * @param _mean_rewards
          * @param _transitions
          * @param _terminal_states vector containing the indices of the terminal states
@@ -117,6 +120,12 @@ namespace mdp
          * @return true if _state is terminal, false otherwise
          */
         bool is_terminal(int _state);
+
+        /**
+         * Object to store history of calls to step().
+         * @note This object needs to be manually initialized by the user.
+         */
+        History<int, int> history; 
 
         // Members of base class
         int state;
