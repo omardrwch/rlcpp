@@ -8,7 +8,6 @@
 
 #include <vector>
 #include <algorithm>
-#include "mdp.h"
 #include "finitemdp.h"
 #include "utils.h"
 

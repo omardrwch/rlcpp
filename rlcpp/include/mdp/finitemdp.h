@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <assert.h> 
-#include "mdp.h"
+#include "abstractmdp.h"
 #include "utils.h"
 
 namespace mdp

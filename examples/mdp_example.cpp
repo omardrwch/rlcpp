@@ -5,8 +5,6 @@
 
 #include <iostream>
 #include "mdp.h"
-#include "finitemdp.h"
-#include "chain.h"
 #include "utils.h"
 
 using namespace std;
@@ -19,7 +17,7 @@ int main(void)
 
 
     cout << mdp.id << endl << endl; 
-    
+
     for(int i = 0; i < 100; i++)
     {
         int state = mdp.state;
