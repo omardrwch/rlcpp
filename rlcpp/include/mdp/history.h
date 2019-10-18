@@ -128,8 +128,7 @@ namespace mdp
     template <typename S, typename A> 
     History<S, A>::History(unsigned int target_length /* = 0 */, unsigned int _n_extra_variables /* = 0 */)
     {
-        n_extra_variables = _n_extra_variables;
-        // Reserve memory
+        // Reserve memory and set n_extra_variables
         reserve_mem(target_length, _n_extra_variables);
     }
     
@@ -141,6 +140,8 @@ namespace mdp
     template <typename S, typename A> 
     void History<S, A>::reserve_mem(unsigned int target_length/* = 0 */, unsigned int _n_extra_variables/* = 0 */)
     {
+        n_extra_variables = _n_extra_variables;
+
         if (_n_extra_variables > 0) extra_variables.resize(_n_extra_variables);
 
         if (target_length > 0)
@@ -163,6 +164,7 @@ namespace mdp
     template <typename S, typename A> 
     void History<S, A>::append(S _state, A _action, double _reward, S _next_state, int _episode /* = 0 */)
     {
+        assert( n_extra_variables == 0 && "Extra variables need to be appended too!");
         states.push_back(_state);
         actions.push_back(_action);
         next_states.push_back(_next_state);
@@ -174,13 +176,18 @@ namespace mdp
     template <typename S, typename A> 
     void History<S, A>::append(S _state, A _action, double _reward, S _next_state, std::vector<double> _extra_vars, int _episode /* = 0 */)
     {
-        append(_state, _action, _reward, _next_state, _episode);
+        states.push_back(_state);
+        actions.push_back(_action);
+        next_states.push_back(_next_state);
+        rewards.push_back(_reward);
+        episodes.push_back(_episode);
 
         assert( _extra_vars.size() == n_extra_variables && "Check length of _extra_vars!");
         for(int i = 0; i < _extra_vars.size(); i++)
         {
             extra_variables[i].data.push_back(_extra_vars[i]); 
         }    
+        length += 1;
     }
     template <typename S, typename A> 
     void History<S, A>::set_names(std::vector<std::string> names)
