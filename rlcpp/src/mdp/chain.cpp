@@ -1,9 +1,11 @@
+#include <assert.h> 
 #include "chain.h"
 
 namespace mdp
 {
     Chain::Chain(int N)
     {
+        assert(N > 0 && "Chain needs at least one state");
         utils::vec_3d _rewards = utils::get_zeros_3d(N, 2, N);
         utils::vec_3d _transitions = utils::get_zeros_3d(N, 2, N);
         std::vector<int> _terminal_states = {N-1};
@@ -31,5 +33,6 @@ namespace mdp
             }
         }
         set_params(_rewards, _transitions, _terminal_states);
+        id = "Chain";
     }
 }

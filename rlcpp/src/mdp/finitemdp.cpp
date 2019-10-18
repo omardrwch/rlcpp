@@ -5,39 +5,12 @@ namespace mdp
 {
     FiniteMDP::FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
     {
-        mean_rewards = _mean_rewards;
-        transitions = _transitions;
-        randgen.set_seed(_seed);
-        id = "FiniteMDP";
-        default_state = _default_state;
-
-        ns = _mean_rewards.size();
-        assert( ns > 0 && "At least one state is required.");
-        na = _mean_rewards[0].size();
-
-        observation_space.set_n(ns);
-        action_space.set_n(na);
-
-        reset();
+        set_params(_mean_rewards, _transitions, _default_state, _seed);
     }
 
     FiniteMDP::FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
     {
-        mean_rewards = _mean_rewards;
-        transitions = _transitions;
-        randgen.set_seed(_seed);
-        id = "FiniteMDP";
-        default_state = _default_state;
-
-        ns = _mean_rewards.size();
-        assert( ns > 0 && "At least one state is required.");
-        na = _mean_rewards[0].size();
-
-        observation_space.set_n(ns);
-        action_space.set_n(na);
-
-        terminal_states = _terminal_states;
-        reset();        
+        set_params(_mean_rewards, _transitions, _terminal_states, _default_state, _seed);
     }
 
     void FiniteMDP::set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
@@ -48,12 +21,16 @@ namespace mdp
         id = "FiniteMDP";
         default_state = _default_state;
 
+        check();
         ns = _mean_rewards.size();
-        assert( ns > 0 && "At least one state is required.");
         na = _mean_rewards[0].size();
 
+        // observation and action spaces
         observation_space.set_n(ns);
         action_space.set_n(na);
+        // seeds for spaces
+        observation_space.generator.seed(_seed+123);
+        action_space.generator.seed(_seed+456);
 
         reset();
     }
@@ -66,15 +43,38 @@ namespace mdp
         id = "FiniteMDP";
         default_state = _default_state;
 
+        check();
         ns = _mean_rewards.size();
-        assert( ns > 0 && "At least one state is required.");
         na = _mean_rewards[0].size();
 
+        // observation and action spaces
         observation_space.set_n(ns);
         action_space.set_n(na);
+        // seeds for spaces
+        observation_space.generator.seed(_seed+123);
+        action_space.generator.seed(_seed+456);
 
         terminal_states = _terminal_states;
         reset();        
+    }
+
+    void FiniteMDP::check()
+    {
+        // Check shape of transitions and rewards
+        assert(mean_rewards.size() > 0);
+        assert(mean_rewards[0].size() > 0);
+        assert(mean_rewards[0][0].size() > 0);
+        assert(transitions.size() > 0);
+        assert(transitions[0].size() > 0);
+        assert(transitions[0][0].size() > 0);
+
+        // Check consistency of number of states
+        assert(mean_rewards[0][0].size() == mean_rewards.size());
+        assert(transitions[0][0].size() == transitions.size());
+        assert(transitions.size() == mean_rewards.size());
+
+        // Check consistency of number of actions
+        assert(mean_rewards[0].size() == transitions[0].size());
     }
 
     int FiniteMDP::reset()

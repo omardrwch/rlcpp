@@ -17,6 +17,9 @@ int main(void)
 
     mdp::Chain mdp(3);
 
+
+    cout << mdp.id << endl << endl; 
+    
     for(int i = 0; i < 100; i++)
     {
         int state = mdp.state;

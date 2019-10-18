@@ -38,10 +38,13 @@ namespace mdp
          */
         void set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
 
+        /**
+         * @brief check if attributes are well defined.
+         */
+        void check();
     public:
 
         /**
-         * @note The _seed is used for generating the transitions. The state and action spaces have their own (default) seeds.
          * @param _mean_rewards
          * @param _transitions
          * @param _default_state index of the default state
@@ -51,7 +54,6 @@ namespace mdp
 
 
         /**
-         * @note The _seed is used for generating the transitions. The state and action spaces have their own (default) seeds.
          * @param _mean_rewards
          * @param _transitions
          * @param _terminal_states vector containing the indices of the terminal states
