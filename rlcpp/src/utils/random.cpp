@@ -16,7 +16,7 @@ namespace utils
         generator.seed(_seed);
     }
 
-    int Random::choice(std::vector<double> prob, double u /* = -1 */)
+    int Random::choice(std::vector<double>& prob, double u /* = -1 */)
     {
         int n = prob.size();
         std::vector<double> cumul(n);

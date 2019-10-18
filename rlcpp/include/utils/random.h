@@ -48,12 +48,13 @@ namespace utils
 
         /**
          * @brief Sample according to probability vector.
-         * @param prob probability vector
+         * @details The parameter prob is passed by reference to avoid copying. It is not changed by the algorithm.
+         * @param prob probability vector 
          * @param u (optional) sample from a real uniform distribution in (0, 1)
          * @return integer between 0 and prob.size()-1 according to 
          * the probabilities in prob.
          */
-        int choice(std::vector<double> prob, double u = -1);
+        int choice(std::vector<double>& prob, double u = -1);
 
         /**
          * @brief Sample from (continuous) uniform distribution in (a, b)
