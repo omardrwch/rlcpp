@@ -9,7 +9,6 @@
 #include <vector>
 #include <algorithm>
 #include "finitemdp.h"
-#include "utils.h"
 
 namespace mdp
 {

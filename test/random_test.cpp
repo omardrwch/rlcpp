@@ -4,7 +4,7 @@
 
 TEST_CASE( "Testing Random::choice", "[choice]" )
 {
-    utils::Random randgen(42); 
+    utils::rand::Random randgen(42); 
     std::vector<double> prob = {0.1, 0.2, 0.3, 0.4};
     std::vector<double> prob_backup = {0.1, 0.2, 0.3, 0.4};
 

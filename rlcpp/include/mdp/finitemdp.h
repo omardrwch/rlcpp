@@ -29,7 +29,7 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */       
-        void set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
+        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
 
         /**
          * @brief Constructor *with* terminal states.
@@ -39,7 +39,7 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        void set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
+        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
 
         /**
          * @brief check if attributes are well defined.
@@ -53,7 +53,7 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
+        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
 
 
         /**
@@ -63,7 +63,7 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
+        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
 
         ~FiniteMDP(){};
 
@@ -71,13 +71,13 @@ namespace mdp
          * 3d vector such that mean_rewards[s][a][s'] is the mean reward obtained when the 
          * state s' is reached by taking action a in state s.
          */
-        utils::vec_3d mean_rewards;
+        utils::vec::vec_3d mean_rewards;
 
         /**
          * 3d vector such that transitions[s][a][s'] is the probability of reaching
          * state s' by taking action a in state s.
          */
-        utils::vec_3d transitions;
+        utils::vec::vec_3d transitions;
 
         /**
          * Default state
@@ -87,7 +87,7 @@ namespace mdp
         /**
          * For random number generation
          */
-        utils::Random randgen;
+        utils::rand::Random randgen;
 
         /**
          * Number of states

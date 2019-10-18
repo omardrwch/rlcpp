@@ -4,17 +4,17 @@
 
 namespace mdp
 {
-    FiniteMDP::FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
+    FiniteMDP::FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
     {
         set_params(_mean_rewards, _transitions, _default_state, _seed);
     }
 
-    FiniteMDP::FiniteMDP(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
+    FiniteMDP::FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
     {
         set_params(_mean_rewards, _transitions, _terminal_states, _default_state, _seed);
     }
 
-    void FiniteMDP::set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
+    void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
     {
         mean_rewards = _mean_rewards;
         transitions = _transitions;
@@ -36,7 +36,7 @@ namespace mdp
         reset();
     }
 
-    void FiniteMDP::set_params(utils::vec_3d _mean_rewards, utils::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
+    void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, unsigned _seed /* = 42 */)
     {
         mean_rewards = _mean_rewards;
         transitions = _transitions;
