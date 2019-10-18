@@ -14,6 +14,10 @@ namespace mdp
     */ 
     template class History<int, int>;
 
+    /**
+     * @brief Print first N entries of the history.
+     * @param N
+     */
     template <>
     void History<int, int>::print(unsigned int N)
     {

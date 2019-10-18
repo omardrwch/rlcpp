@@ -23,6 +23,9 @@ namespace mdp
     class Chain: public FiniteMDP
     {
     public:
+        /**
+         * @brief Build chain MDP of length N 
+         */
         Chain(int N);
         ~Chain(){};
     };

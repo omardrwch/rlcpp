@@ -89,7 +89,9 @@ namespace spaces
         int sample();
         bool contains(int x);
 
-        // Name of the space
+        /**
+         * Name of the space
+         */
         spc_name name = discrete;
     };
 
@@ -126,7 +128,9 @@ namespace spaces
         std::vector<double> sample();
         bool contains(std::vector<double> x);
 
-        // Name of the space
+        /**
+         * Name of the space
+         */
         spc_name name = box;
 
         // Attributes

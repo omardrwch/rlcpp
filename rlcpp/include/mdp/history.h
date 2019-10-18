@@ -19,7 +19,13 @@ namespace mdp
      */
     struct NamedDoubleVec
     {
+        /**
+         * Name that identifies the data.
+         */
         std::string name = " ";
+        /**
+         * Data
+         */
         std::vector<double> data;
     };
     
@@ -37,7 +43,7 @@ namespace mdp
         /**
          * @brief Initialize history object and reserve memory for storing data.
          * @param target_length Expected length of data arrays. Used to reserve memory for vectors.
-         * @param n_extra_variables Number of extra variables (of type double) that are stored in each step of the history.
+         * @param _n_extra_variables Number of extra variables (of type double) that are stored in each step of the history.
          * @details target_length is 0 by default, but setting it to the number of expected number of iterations
          * with the MDP is recommended for efficiency.
          */
@@ -47,7 +53,7 @@ namespace mdp
         /**
          * Reserve memory
          * @param target_length Expected length of data arrays.
-         * @param n_extra_variables Number of extra variables (of type double) that are stored in each step of the history.
+         * @param _n_extra_variables Number of extra variables (of type double) that are stored in each step of the history.
          */
         void reserve_mem(unsigned int target_length=0, unsigned int _n_extra_variables=0);
 
@@ -120,6 +126,7 @@ namespace mdp
 
         /**
          * @brief Print first N entries in the history
+         * @param N number of entries to print
          */
         void print(unsigned int N);
     };

@@ -128,7 +128,14 @@ namespace mdp
         History<int, int> history; 
 
         // Members of base class
+
+        /**
+         * Current state
+         */ 
         int state;
+        /**
+         * MDP identifier
+         */ 
         std::string id; 
         int reset();
         StepResult<int> step(int action);

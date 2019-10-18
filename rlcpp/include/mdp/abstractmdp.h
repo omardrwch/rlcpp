@@ -20,6 +20,12 @@ namespace mdp
     {
     public:
         StepResult(); // default constructor
+        /**
+         * @brief Initialize object with data
+         * @param _next_state
+         * @param _reward
+         * @param _done
+         */
         StepResult(S _next_state, double _reward, bool _done);
         ~StepResult(){};
 

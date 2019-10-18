@@ -57,7 +57,7 @@ namespace utils
         std::cout << "}" << std::endl;
     }
 
-    vec_2d get_zeros_2d(int dim1, int dim2, int dim3)
+    vec_2d get_zeros_2d(int dim1, int dim2)
     {
         utils::vec_2d vector;
         for(int ii = 0; ii < dim1; ii++)

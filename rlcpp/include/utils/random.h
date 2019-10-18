@@ -17,6 +17,10 @@ namespace utils
     class Random
     {
     public:
+        /**
+         * @brief Initializes object with given seed.
+         * @param _seed
+         */
         Random(unsigned _seed = 42);
         ~Random(){};
 
