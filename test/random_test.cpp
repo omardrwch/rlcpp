@@ -12,6 +12,7 @@ TEST_CASE( "Testing Random::choice", "[choice]" )
     std::vector<double> prob3 = {0.0, 1.0, 0.0, 0.0};
     std::vector<double> prob4 = {0.0, 0.0, 1.0, 0.0};
     std::vector<double> prob5 = {0.0, 0.0, 0.0, 1.0};
+    std::vector<double> prob6 = {1.0};
 
     REQUIRE( randgen.choice(prob, 0)    == 0 );
     REQUIRE( randgen.choice(prob, 0.05) == 0 );
@@ -27,6 +28,7 @@ TEST_CASE( "Testing Random::choice", "[choice]" )
     REQUIRE( randgen.choice(prob3) == 1 );
     REQUIRE( randgen.choice(prob4) == 2 );
     REQUIRE( randgen.choice(prob5) == 3 );
+    REQUIRE( randgen.choice(prob6) == 0 );
 
     // Verify that calls to choice do not change the vector prob
     bool prob_unchanged = true;

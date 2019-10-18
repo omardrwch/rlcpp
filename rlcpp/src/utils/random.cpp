@@ -19,6 +19,11 @@ namespace utils
     int Random::choice(std::vector<double>& prob, double u /* = -1 */)
     {
         int n = prob.size();
+        if (n == 0)
+        {
+            std::cerr << "Calling Random::choice with empty probability vector! Returning -1." << std::endl;
+            return -1;
+        }
         std::vector<double> cumul(n);
 
         // Compute cumulative distribution function 

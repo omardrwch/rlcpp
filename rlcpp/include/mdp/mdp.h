@@ -5,6 +5,7 @@
 #include "finitemdp.h"
 #include "chain.h"
 #include "space.h"
+#include "history.h"
 
 /**
  * @file Gather all mdp headers.
