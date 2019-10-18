@@ -16,8 +16,6 @@ int main(void)
     /*   Defining a simple MDP with 3 states and 2 actions  */    
 
     mdp::Chain mdp(20);
-
-
     cout << mdp.id << endl << endl; 
 
     int max_t = 15;
@@ -44,6 +42,9 @@ int main(void)
 
     // print history
     mdp.history.print(max_t);
+
+    // save history in csv file
+    mdp.history.to_csv("data/temp.csv");
 
     return 0;
 }

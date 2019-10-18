@@ -129,6 +129,12 @@ namespace mdp
          * @param N number of entries to print
          */
         void print(unsigned int N);
+
+        /**
+         * @brief Write csv file with history
+         * @param filename example: "myfile.csv"
+         */
+        void to_csv(std::string filename);
     };
     
 
