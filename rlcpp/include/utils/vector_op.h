@@ -23,7 +23,7 @@ namespace utils
 
 
         /**
-         * @brief Type for 2d vector
+         * @brief Type for 2d vector (integer)
          */
         typedef std::vector<std::vector<int>> ivec_2d;
 
@@ -31,6 +31,11 @@ namespace utils
          * @brief Type for 3d vector
          */
         typedef std::vector<std::vector<std::vector<double>>> vec_3d;
+
+        /**
+         * @brief Type for 3d vector (integer)
+         */
+        typedef std::vector<std::vector<std::vector<int>>> ivec_3d;
 
         /**
          * @brief Computes the mean of a vector.
@@ -97,6 +102,15 @@ namespace utils
          * @return vec_3d with dimensions (dim1, dim2, dim3)
          */
         vec_3d get_zeros_3d(int dim1, int dim2, int dim3);
+
+        /**
+         * @brief Get 3d vector of integers of dimensions (dim1, dim2, dim3) filled with zeros
+         * @param dim1
+         * @param dim2
+         * @param dim3
+         * @return vec_3d with dimensions (dim1, dim2, dim3)
+         */
+        ivec_3d get_zeros_i3d(int dim1, int dim2, int dim3);
     }
 }
 
