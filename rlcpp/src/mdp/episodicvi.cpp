@@ -60,7 +60,7 @@ void EpisodicVI::evaluate_policy(utils::vec::ivec_2d pi, utils::vec::vec_2d& Vpi
                 tmp +=  P[s][a][sn] *(R[s][a][sn] + Vpi[h+1][sn]);
             }
 
-            V[h][s] = tmp;
+            Vpi[h][s] = tmp;
         }
     }
 

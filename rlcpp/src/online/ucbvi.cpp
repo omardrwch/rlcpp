@@ -6,6 +6,7 @@ namespace online
 UCBVI::UCBVI(mdp::FiniteMDP &mdp, int horizon) :
     mdp(mdp), horizon(horizon), VI(mdp::EpisodicVI(mdp, horizon))
 {
+    reset();
 }
 
 void UCBVI::reset()
