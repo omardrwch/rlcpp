@@ -1,7 +1,8 @@
 #include <vector>
 #include <math.h>
-#include <assert.h> 
+#include <assert.h>
 #include <iostream>
+#include <cmath>
 #include "vector_op.h"
 
 
@@ -30,7 +31,7 @@ namespace utils
             for(int i = 0; i < n; i++)
             {
                 aux[i] = std::pow(vec[i]-mu, 2.0);
-            }       
+            }
             return std::sqrt(mean(aux));
         }
 
@@ -47,26 +48,38 @@ namespace utils
             return result;
         }
 
-        void printvec(std::vector<double> vec)
-        {
-            int n = vec.size();
-            std::cout << "{";
-            for(int i = 0; i < n; i++)
-            {
-                std::cout << vec[i];
-                if (i < n-1){ std::cout << ", ";}
-            }   
-            std::cout << "}" << std::endl;
-        }
+        // template <typename T>
+        // void printvec(std::vector<T> vec)
+        // {
+        //     int n = vec.size();
+        //     std::cout << "{";
+        //     for(int i = 0; i < n; i++)
+        //     {
+        //         std::cout << vec[i];
+        //         if (i < n-1){ std::cout << ", ";}
+        //     }
+        //     std::cout << "}" << std::endl;
+        // }
 
         vec_2d get_zeros_2d(int dim1, int dim2)
         {
             utils::vec::vec_2d vector;
             for(int ii = 0; ii < dim1; ii++)
-            {   
+            {
                 vector.push_back(std::vector<double>());
                 for(int jj = 0; jj < dim2; jj++) vector[ii].push_back(0.0);
-            }   
+            }
+            return vector;
+        }
+
+        ivec_2d get_zeros_i2d(int dim1, int dim2)
+        {
+            utils::vec::ivec_2d vector;
+            for(int ii = 0; ii < dim1; ii++)
+            {
+                vector.push_back(std::vector<int>());
+                for(int jj = 0; jj < dim2; jj++) vector[ii].push_back(0);
+            }
             return vector;
         }
 
@@ -74,15 +87,16 @@ namespace utils
         {
             utils::vec::vec_3d vector;
             for(int ii = 0; ii < dim1; ii++)
-            {   
+            {
                 vector.push_back(std::vector<std::vector<double>>());
                 for(int jj = 0; jj < dim2; jj++)
                 {
                     vector[ii].push_back(std::vector<double>());
                     for(int kk = 0; kk < dim3; kk++) vector[ii][jj].push_back(0.0);
                 }
-            }   
+            }
             return vector;
         }
     }
 }
+

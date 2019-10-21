@@ -13,7 +13,7 @@
 
 int main(void)
 {
-    utils::vec_2d mat; 
+    utils::vec::vec_2d mat; 
     int n = 4;
     int m = 5;
     for(int i = 0; i < n; i++)
@@ -25,12 +25,12 @@ int main(void)
         }
     }       
 
-    utils::vec_2d lala; 
+    utils::vec::vec_2d lala; 
     lala = mat; 
 
     for(int i = 0; i < n; i++)
     {
-        utils::printvec(lala[i]);
+            utils::vec::printvec(lala[i]);
     }
 
     std::cout << lala.size() << std::endl;

@@ -7,6 +7,7 @@
  */
 
 #include <vector>
+#include <iostream>
 
 namespace utils
 {
@@ -20,6 +21,12 @@ namespace utils
          */
         typedef std::vector<std::vector<double>> vec_2d;
 
+
+        /**
+         * @brief Type for 2d vector
+         */
+        typedef std::vector<std::vector<int>> ivec_2d;
+
         /**
          * @brief Type for 3d vector
          */
@@ -30,7 +37,7 @@ namespace utils
          * @param vec
          * @return mean of vec
          */
-        double mean(std::vector<double> vec); 
+        double mean(std::vector<double> vec);
 
         /**
          * @brief Computes the standard deviation of a vector.
@@ -51,7 +58,20 @@ namespace utils
          * @brief Print vector
          * @param vec
          */
-        void printvec(std::vector<double> vec);
+        template <typename T>
+        void printvec(std::vector<T> vec)
+        {
+            int n = vec.size();
+            std::cout << "{";
+            for(int i = 0; i < n; i++)
+            {
+                std::cout << vec[i];
+                if (i < n-1){ std::cout << ", ";}
+            }
+            std::cout << "}" << std::endl;
+        }
+        template void printvec<double>(std::vector<double>);
+        template void printvec<int>(std::vector<int>);
 
         /**
          * @brief Get 2d vector of doubles of dimensions (dim1, dim2) filled with zeros
@@ -60,6 +80,14 @@ namespace utils
          * @return vec_2d with dimensions (dim1, dim2)
          */
         vec_2d get_zeros_2d(int dim1, int dim2);
+
+        /**
+         * @brief Get 2d vector of integers of dimensions (dim1, dim2) filled with zeros
+         * @param dim1
+         * @param dim2
+         * @return ivec_2d with dimensions (dim1, dim2)
+         */
+        ivec_2d get_zeros_i2d(int dim1, int dim2);
 
         /**
          * @brief Get 3d vector of doubles of dimensions (dim1, dim2, dim3) filled with zeros
@@ -73,3 +101,4 @@ namespace utils
 }
 
 #endif
+
