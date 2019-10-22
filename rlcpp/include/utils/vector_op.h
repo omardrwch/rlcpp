@@ -17,7 +17,7 @@ namespace utils
     namespace vec
     {
         /**
-         * @brief Type for 2d vector
+         * @brief Type for 2d vector (double)
          */
         typedef std::vector<std::vector<double>> vec_2d;
 
@@ -28,7 +28,7 @@ namespace utils
         typedef std::vector<std::vector<int>> ivec_2d;
 
         /**
-         * @brief Type for 3d vector
+         * @brief Type for 3d vector (double)
          */
         typedef std::vector<std::vector<std::vector<double>>> vec_3d;
 

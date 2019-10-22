@@ -88,7 +88,7 @@ namespace mdp
                     assert(transitions[i][a][j] >= 0.0); 
                     sum += transitions[i][a][j];
                 }
-                assert(fabs(sum - 1.0) <= 1e-16); 
+                assert(std::abs(sum - 1.0) <= 1e-16); 
             }
         }
     }
