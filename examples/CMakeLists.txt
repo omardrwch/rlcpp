@@ -16,6 +16,9 @@ target_link_libraries(mdp_example rlcpp)
 add_executable(vi_example vi_example.cpp)
 target_link_libraries(vi_example rlcpp)
 
+add_executable(ucbvi_example ucbvi_example.cpp)
+target_link_libraries(ucbvi_example rlcpp)
+
 # add_executable(subapp1 subapp1/main.cpp)
 # target_link_libraries(subapp1 rlcpp)
 

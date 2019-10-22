@@ -49,14 +49,16 @@ void UCBVI::get_optimistic_q()
                     tmp = 0;
                     for (int sn=0; sn < mdp.ns; sn++)
                     {
-                        tmp +=  Phat[s][a][sn] *(Rhat[s][a][sn] + V[h+1][sn]);
+                        tmp +=  Phat[s][a][sn] * (Rhat[s][a][sn] + V[h+1][sn]);
                     }
                     tmp += bonus[h][s][a];
                     Q[h][s][a] = tmp;
 
                     if ((a == 0) || (tmp > V[h][s]))
+                    {
                         V[h][s] = std::min((double)horizon, tmp);
-                    policy[h][s] = a;
+                        policy[h][s] = a;
+                    }
 
                 }
             }
@@ -64,7 +66,7 @@ void UCBVI::get_optimistic_q()
     }
 }
 
-utils::vec::vec_3d UCBVI::compute_bonus()
+void UCBVI::compute_bonus()
 {
     int tt = std::max(1, t);
     double L = log(5 * mdp.ns * mdp.na * tt / delta);
@@ -81,11 +83,12 @@ utils::vec::vec_3d UCBVI::compute_bonus()
     }
 }
 
-void UCBVI::run_episode()
+int UCBVI::run_episode()
 {
     double episode_reward = 0;
     int action;
     int state = mdp.reset();
+    int initial_state = state;
     get_optimistic_q();
 
     // True value of the greedy policy wrt Q
@@ -111,6 +114,7 @@ void UCBVI::run_episode()
     // store the reward obtained in the episode
     all_episode_rewards.push_back(episode_reward);
 
+    return initial_state;
 }
 
 void UCBVI::update(int state, int action, double reward, int next_state)

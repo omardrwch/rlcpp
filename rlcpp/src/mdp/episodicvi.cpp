@@ -34,8 +34,10 @@ void EpisodicVI::run()
                 Q[h][s][a] = tmp;
 
                 if ((a ==0) || (tmp > V[h][s]))
+                {
                     V[h][s] = tmp;
-                greedy_policy[h][s] = a;
+                    greedy_policy[h][s] = a;
+                }
 
             }
         }

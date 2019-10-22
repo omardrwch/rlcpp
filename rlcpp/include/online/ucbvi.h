@@ -16,9 +16,9 @@ public:
 
     void get_optimistic_q();
 
-    utils::vec::vec_3d compute_bonus();
+    void compute_bonus();
 
-    void run_episode();
+    int run_episode();
 
     void update(int state, int action, double reward, int next_state);
 
