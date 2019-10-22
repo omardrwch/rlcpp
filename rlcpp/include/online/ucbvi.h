@@ -10,7 +10,7 @@ namespace online
 class UCBVI
 {
 public:
-    UCBVI(mdp::FiniteMDP& mdp, int horizon);
+    UCBVI(mdp::FiniteMDP& mdp, int horizon, double scale_factor=1);
 
     void reset();
 
@@ -18,7 +18,7 @@ public:
 
     void compute_bonus();
 
-    int run_episode();
+    int run_episode(utils::vec::vec_2d& trueV);
 
     void update(int state, int action, double reward, int next_state);
 
@@ -40,6 +40,7 @@ public:
     std::vector<double> all_episode_rewards;
     std::vector<double> episode_value;
     mdp::EpisodicVI VI;
+    double scale_factor;
 
 };
 }

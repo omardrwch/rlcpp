@@ -6,14 +6,15 @@
 
 namespace online
 {
-UCBVI::UCBVI(mdp::FiniteMDP &mdp, int horizon) :
-    mdp(mdp), horizon(horizon), VI(mdp::EpisodicVI(mdp, horizon))
+UCBVI::UCBVI(mdp::FiniteMDP &mdp, int horizon, double scale_factor) :
+    mdp(mdp), horizon(horizon), VI(mdp::EpisodicVI(mdp, horizon)), scale_factor(scale_factor)
 {
     reset();
 }
 
 void UCBVI::reset()
 {
+    delta = 0.1;
     t = episode = 0;
     Phat = utils::vec::get_zeros_3d(mdp.ns, mdp.na, mdp.ns);
     Rhat = utils::vec::get_zeros_3d(mdp.ns, mdp.na, mdp.ns);
@@ -39,11 +40,9 @@ void UCBVI::reset()
 
         @todo Implement a function history.clear() and call it here.
     */
-    int _n_extra_variables = 2;
     // The first parameter in reserve_mem() does not need to be the exact value, it's just for speedup (it is used for calling vector.reserve()).
-    mdp.history.reserve_mem(horizon*1000, _n_extra_variables); 
-    
-    std::vector<std::string> names = {"extra_var_1", "extra_var_2"};
+    std::vector<std::string> names = {"regret"};
+    mdp.history.reserve_mem(horizon*1000, names.size());
     mdp.history.set_names(names);
 }
 
@@ -75,11 +74,13 @@ void UCBVI::get_optimistic_q()
 
                     if ((a == 0) || (tmp > V[h][s]))
                     {
-                        V[h][s] = std::min((double)horizon, tmp);
+                        V[h][s] = tmp;
                         policy[h][s] = a;
                     }
 
                 }
+                // truncate value function
+                V[h][s] = std::min((double)horizon, V[h][s]);
             }
         }
     }
@@ -87,22 +88,20 @@ void UCBVI::get_optimistic_q()
 
 void UCBVI::compute_bonus()
 {
-    int tt = std::max(1, t);
-    double L = log(5 * mdp.ns * mdp.na * tt / delta);
-
     for (int h=0; h < horizon; ++h)
     {
         for (int s=0; s < mdp.ns; s++)
         {
             for (int a=0; a < mdp.na; a++)
             {
-                bonus[h][s][a] = 7 * horizon * L / sqrt(std::max(1, N_sa[s][a]));
+                double L = log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
+                bonus[h][s][a] = scale_factor * 7 * horizon * L / sqrt(std::max(1, N_sa[s][a]));
             }
         }
     }
 }
 
-int UCBVI::run_episode()
+int UCBVI::run_episode(utils::vec::vec_2d& trueV)
 {
     double episode_reward = 0;
     int action;
@@ -112,7 +111,9 @@ int UCBVI::run_episode()
 
     // True value of the greedy policy wrt Q
     VI.evaluate_policy(policy, Vpi);
-    episode_value.push_back(Vpi[0][state]);
+    episode_value.push_back(trueV[0][state] - Vpi[0][state]);
+
+    std::vector<double> extra_vars = {trueV[0][state] - Vpi[0][state]};
 
     // execute policy
     for (int h=0; h < horizon; ++h)
@@ -121,13 +122,12 @@ int UCBVI::run_episode()
 
         // take step and store state and reward
         mdp::StepResult<int> result = mdp.step(action);
-        update(state, action, result.reward, result.next_state);     
+        update(state, action, result.reward, result.next_state);
 
         // ---
         // Update MDP history
-        std::vector<double> extra_vars = {-1.0, -1.0}; // values of extra variables (if needed)
         mdp.history.append(state, action, result.reward, result.next_state, extra_vars, episode);
-        // ---   
+        // ---
 
         episode_reward += result.reward;
         state = result.next_state;
