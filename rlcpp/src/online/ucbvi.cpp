@@ -25,6 +25,7 @@ void UCBVI::reset()
     Vpi = utils::vec::get_zeros_2d(horizon + 1, mdp.ns);
 
     all_episode_rewards.clear();
+    episode_value.clear();
 }
 
 void UCBVI::get_optimistic_q()
@@ -123,7 +124,6 @@ void UCBVI::update(int state, int action, double reward, int next_state)
         Phat[state][action][sn] = N_sas[state][action][sn] / N_sa[state][action];
 
     Rhat[state][action][next_state] = (Rhat[state][action][next_state] * old_n + reward) / (old_n + 1);
-
 }
 
 
