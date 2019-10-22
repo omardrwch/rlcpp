@@ -14,11 +14,12 @@
 using namespace std;
 using namespace utils::vec;
 
-std::vector<double> run_simulation(mdp::FiniteMDP& mdp, int horizon, int nb_episodes, vec_2d& trueV, double scale_factor)
+std::vector<double> run_simulation(mdp::FiniteMDP& mdp, int horizon, int nb_episodes, vec_2d& trueV,
+                                   double scale_factor, std::string bound_type)
 {
     double old_regret = 0, episode_regret;
     int init_state;
-    online::UCBVI algo(mdp, horizon, scale_factor);
+    online::UCBVI algo(mdp, horizon, scale_factor, bound_type);
     algo.reset();
     std::vector<double> regret;
     regret.reserve(nb_episodes+1);
@@ -58,24 +59,27 @@ int main(void)
     cout << mdp.id << endl << endl;
 
     int horizon = 4;
-    double scale_factor = 0.1;
+    double scale_factor = 1;
+    std::string bound_type = "hoeffding";
 
     // compute true value function
     mdp::EpisodicVI vi(mdp, horizon);
     vi.run();
     vec_2d& trueV = vi.V;
 
-    for (int h=0; h < horizon; ++h) {
-      printvec(vi.greedy_policy[h]);
+    for (int h=0; h < horizon; ++h)
+    {
+        printvec(vi.greedy_policy[h]);
     }
 
 
 
     // run simulation
-    std::vector<double> regret = run_simulation(mdp, horizon, 3000, trueV, scale_factor);
+    std::vector<double> regret = run_simulation(mdp, horizon, 3000, trueV,
+                                 scale_factor, bound_type);
 
     // Save history
-    mdp.history.to_csv("data/ucbvi.csv");
+    mdp.history.to_csv("data/ucbvi_" + bound_type + ".csv");
 
     return 0;
 }

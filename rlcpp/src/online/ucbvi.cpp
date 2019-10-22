@@ -6,8 +6,10 @@
 
 namespace online
 {
-UCBVI::UCBVI(mdp::FiniteMDP &mdp, int horizon, double scale_factor) :
-    mdp(mdp), horizon(horizon), VI(mdp::EpisodicVI(mdp, horizon)), scale_factor(scale_factor)
+UCBVI::UCBVI(mdp::FiniteMDP &mdp, int horizon,
+             double scale_factor, std::string b_type) :
+    mdp(mdp), horizon(horizon), VI(mdp::EpisodicVI(mdp, horizon)),
+    scale_factor(scale_factor), b_type(b_type)
 {
     reset();
 }
@@ -50,16 +52,26 @@ void UCBVI::get_optimistic_q()
 {
     //initialize stage H+1
     for (int i=0; i < mdp.ns; ++i)
+    {
+        V[horizon-1][i] = 0;
         for (int j=0; j <mdp.na; ++j)
             Q[horizon][i][j] = 0;
+    }
     double tmp;
 
     if (episode > 0)
     {
-        compute_bonus();
+        if (b_type == "hoeffding")
+        {
+            compute_hoeffding_bonus();
+        }
 
         for(int h=horizon-1; h>=0; h--)
         {
+            if (b_type == "bernstein")
+            {
+                compute_bernstein_bonus(h, V[std::min(h+1, horizon-1)]);
+            }
             for (int s=0; s < mdp.ns; s++)
             {
                 for (int a=0; a < mdp.na; a++)
@@ -86,7 +98,7 @@ void UCBVI::get_optimistic_q()
     }
 }
 
-void UCBVI::compute_bonus()
+void UCBVI::compute_hoeffding_bonus()
 {
     for (int h=0; h < horizon; ++h)
     {
@@ -97,6 +109,31 @@ void UCBVI::compute_bonus()
                 double L = log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
                 bonus[h][s][a] = scale_factor * 7 * horizon * L / sqrt(std::max(1, N_sa[s][a]));
             }
+        }
+    }
+}
+
+void UCBVI::compute_bernstein_bonus(int h,  std::vector<double> Vhp1)
+{
+
+    for (int s=0; s < mdp.ns; s++)
+    {
+        for (int a=0; a < mdp.na; a++)
+        {
+            double L = log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
+            double n = std::max(1, N_sa[s][a]);
+            double var = 0, mean = 0;
+            for (int sn=0; sn < mdp.ns; ++sn)
+            {
+                mean += Phat[s][a][sn] * Vhp1[sn];
+            }
+            for (int sn=0; sn < mdp.ns; ++sn)
+            {
+                var += Phat[s][a][sn] * (Vhp1[sn] - mean) * (Vhp1[sn] - mean);
+            }
+            double T1 = sqrt(8 * L * var / n) + 14 * L * horizon / (3*n);
+            double T2 = sqrt(8 * horizon * horizon / n);
+            bonus[h][s][a] = scale_factor * (T1 + T2);
         }
     }
 }

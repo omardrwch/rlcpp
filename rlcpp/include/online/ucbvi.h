@@ -10,13 +10,15 @@ namespace online
 class UCBVI
 {
 public:
-    UCBVI(mdp::FiniteMDP& mdp, int horizon, double scale_factor=1);
+    UCBVI(mdp::FiniteMDP& mdp, int horizon, double scale_factor=1, std::string b_type="bernstein");
 
     void reset();
 
     void get_optimistic_q();
 
-    void compute_bonus();
+    void compute_hoeffding_bonus();
+
+    void compute_bernstein_bonus(int h,  std::vector<double> Vhp1);
 
     int run_episode(utils::vec::vec_2d& trueV);
 
@@ -41,6 +43,7 @@ public:
     std::vector<double> episode_value;
     mdp::EpisodicVI VI;
     double scale_factor;
+    std::string b_type;
 
 };
 }
