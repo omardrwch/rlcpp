@@ -1,6 +1,6 @@
 /*
     To run this example:
-    $ bash scripts/compile.sh mdp_example && ./build/examples/mdp_example
+    $ bash scripts/compile.sh vi_example && ./build/examples/vi_example
 */
 
 #include <iostream>

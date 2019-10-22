@@ -1,5 +1,8 @@
-#include "ucbvi.h"
 #include <cmath>
+#include <vector>
+#include <string>
+#include "ucbvi.h"
+
 
 namespace online
 {
@@ -26,6 +29,22 @@ void UCBVI::reset()
 
     all_episode_rewards.clear();
     episode_value.clear();
+
+    /** Initialize MDP history
+       - horizon*1000 is a rough estimate of the number of total timesteps (=horizon*number_of_episodes)
+       - _n_extra_variables is the number of extra variables to be stored
+       - names is a vector of strings contaning the name of each extra variable
+
+       The history is updated in UCBVI::run_episode()
+
+        @todo Implement a function history.clear() and call it here.
+    */
+    int _n_extra_variables = 2;
+    // The first parameter in reserve_mem() does not need to be the exact value, it's just for speedup (it is used for calling vector.reserve()).
+    mdp.history.reserve_mem(horizon*1000, _n_extra_variables); 
+    
+    std::vector<std::string> names = {"extra_var_1", "extra_var_2"};
+    mdp.history.set_names(names);
 }
 
 void UCBVI::get_optimistic_q()
@@ -102,7 +121,13 @@ int UCBVI::run_episode()
 
         // take step and store state and reward
         mdp::StepResult<int> result = mdp.step(action);
-        update(state, action, result.reward, result.next_state);
+        update(state, action, result.reward, result.next_state);     
+
+        // ---
+        // Update MDP history
+        std::vector<double> extra_vars = {-1.0, -1.0}; // values of extra variables (if needed)
+        mdp.history.append(state, action, result.reward, result.next_state, extra_vars, episode);
+        // ---   
 
         episode_reward += result.reward;
         state = result.next_state;

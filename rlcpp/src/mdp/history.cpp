@@ -28,6 +28,7 @@ namespace mdp
         std::cout << std::endl << " -------------- First " << n << " entries of history --------------" << std::endl;
         for(int i = 0; i < n; i ++)
         {
+            std::cout << " | "  << "episode = "     << episodes[i] ;
             std::cout << " | "  << "state = "       << states[i] ;
             std::cout << " | "  << "action = "      << actions[i] ;
             std::cout << " | "  << "next state = "  << next_states[i];
@@ -51,11 +52,12 @@ namespace mdp
     {
         std::ofstream file;
         file.open (filename);
-        file << "state,action,next_state, reward,";
+        file << "episode,state,action,next_state, reward,";
         for(int j = 0; j < n_extra_variables; j++) file << extra_variables[j].name << ",";
         file << "\n";
         for(int i = 0; i < length; i ++)
         {
+            file << episodes[i] << ",";
             file << states[i] << ",";
             file << actions[i] << ",";
             file << next_states[i] << ",";

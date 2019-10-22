@@ -1,6 +1,6 @@
 /*
     To run this example:
-    $ bash scripts/compile.sh mdp_example && ./build/examples/mdp_example
+    $ bash scripts/compile.sh ucbvi_example && ./build/examples/ucbvi_example
 */
 
 #include <iostream>
@@ -42,7 +42,7 @@ int main(void)
 {
     /*   Defining a simple MDP with 3 states and 2 actions  */
 
-    mdp::Chain mdp(6);
+    mdp::Chain mdp(4);
     cout << mdp.id << endl << endl;
 
     int horizon = 7;
@@ -53,7 +53,10 @@ int main(void)
     vec_2d& trueV = vi.V;
 
     // run simulation
-    std::vector<double> regret = run_simulation(mdp, horizon, 1000, trueV);
+    std::vector<double> regret = run_simulation(mdp, horizon, 200, trueV);
+
+    // Save history
+    mdp.history.to_csv("data/ucbvi.csv");
 
     return 0;
 }

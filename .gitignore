@@ -53,5 +53,5 @@ build/
 # Documentation folder
 docs/
 
-# Data folder
-data/
+# Data files
+data/*.csv
