@@ -1,5 +1,5 @@
 #include <vector>
-#include <math.h>
+#include <cmath>
 #include "catch.hpp"
 #include "vector_op.h"
 
