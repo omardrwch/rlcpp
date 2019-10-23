@@ -84,7 +84,10 @@ void UCBVI::get_optimistic_q()
                     {
                         tmp +=  Phat[s][a][sn] * (Rhat[s][a][sn] + V[h+1][sn]);
                     }
-                    tmp += bonus[h][s][a];
+                    // add noise to break ties
+                    double noise = 1e-10 * std::rand()/(RAND_MAX + 1u);
+                    // std::cout << noise <<std::endl;
+                    tmp += bonus[h][s][a] + noise;
                     Q[h][s][a] = tmp;
 
                     if ((a == 0) || (tmp > V[h][s]))
@@ -193,9 +196,9 @@ void UCBVI::update(int state, int action, double reward, int next_state)
     // int n_sa = 0;
     // for (int sn=0; sn < mdp.ns; ++sn) n_sa += N_sas[state][action][sn];
     for (int sn=0; sn < mdp.ns; ++sn)
-        Phat[state][action][sn] = N_sas[state][action][sn] / N_sa[state][action];
+        Phat[state][action][sn] = ((double) N_sas[state][action][sn]) / N_sa[state][action];
 
-    Rhat[state][action][next_state] = (Rhat[state][action][next_state] * old_n + reward) / (old_n + 1);
+    Rhat[state][action][next_state] = (Rhat[state][action][next_state] * old_n + reward) / (old_n + 1.);
 }
 
 

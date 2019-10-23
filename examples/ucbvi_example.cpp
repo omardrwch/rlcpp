@@ -55,6 +55,11 @@ public:
         }
         // Save history
         mdp.history.to_csv("data/" + name + ".csv");
+
+        // for (int s=0; s<mdp.ns; s++)
+        // for (int a=0; a<mdp.na;++a){
+        //   utils::vec::printvec(algo.Phat[s][a]);
+        // }
     }
 
     std::vector<double> regret;
@@ -124,8 +129,8 @@ int main(void)
     std::srand(4);
 
     int horizon = 10;
-    double scale_factor = 0.1;
-    std::string bound_type = "bernstein";;
+    double scale_factor = 1;
+    std::string bound_type = "hoeffding";;
 
     mdp::Chain mdp(4);
     cout << mdp.id << endl << endl;
@@ -141,7 +146,7 @@ int main(void)
     }
 
 
-    run_par_simulations(1, 3000, horizon, scale_factor, bound_type, trueV);
+    run_par_simulations(10, 10000, horizon, scale_factor, bound_type, trueV);
 
 
     return 0;
