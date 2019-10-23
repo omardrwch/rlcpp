@@ -25,6 +25,8 @@ MountainCar::MountainCar()
 
     state.push_back(0);
     state.push_back(0);
+
+    id = "MountainCar";
 }
 
 std::vector<double> MountainCar::reset()

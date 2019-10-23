@@ -1,6 +1,6 @@
 /*
     To run this example:
-    $ bash scripts/compile.sh mdp_example && ./build/examples/mdp_example 
+    $ bash scripts/compile.sh mdp_example && ./build/examples/mdp_example
 */
 
 #include <iostream>
@@ -8,15 +8,16 @@
 #include <string>
 #include "mdp.h"
 #include "utils.h"
+#include "mountaincar.h"
 
 using namespace std;
 
 int main(void)
 {
-    /*   Defining a simple MDP with 3 states and 2 actions  */    
+    /*   Defining a simple MDP with 3 states and 2 actions  */
 
     mdp::Chain mdp(20);
-    cout << mdp.id << endl << endl; 
+    cout << mdp.id << endl << endl;
 
     int max_t = 15;
 
@@ -45,6 +46,23 @@ int main(void)
 
     // save history in csv file
     mdp.history.to_csv("data/temp.csv");
+
+    mdp::MountainCar env;
+    std::cout << env.id << std::endl;
+
+    env.history.reserve_mem(max_t, 0);
+
+    std::vector<double> cstate = env.reset();
+    for(int i = 0; i < max_t; i++)
+    {
+        cstate = env.state;
+        int action = env.action_space.sample();
+        mdp::StepResult<std::vector<double>> step_result = env.step(action);
+        env.history.append(cstate, action, step_result.reward, step_result.next_state);
+    }
+
+        // print history
+        env.history.print(max_t);
 
     return 0;
 }
