@@ -23,7 +23,10 @@ for bt in ["bernstein", "hoeffding"]:
 
 for k in results.keys():
     data = results[k].values
+    n_ep, n_rep = data.shape
     mean = np.mean(data, axis=1)
+    std = np.std(data, axis=1) / np.sqrt(n_rep)
     plt.plot(mean, label=k)
+    plt.fill_between(np.arange(n_ep), mean - 2*std, mean + 2*std, alpha=0.15)
 plt.legend()
 plt.show()
