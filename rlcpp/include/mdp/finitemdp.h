@@ -7,7 +7,7 @@
  */
 
 #include <vector>
-#include <assert.h> 
+#include <assert.h>
 #include "abstractmdp.h"
 #include "utils.h"
 #include "history.h"
@@ -19,7 +19,7 @@ namespace mdp
     protected:
         /**
          * @brief Default constructor. Returns a undefined MDP.
-         */ 
+         */
         FiniteMDP(){};
 
         /**
@@ -28,8 +28,8 @@ namespace mdp
          * @param _transitions
          * @param _default_state index of the default state
          * @param _seed random seed
-         */       
-        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
+         */
+        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
 
         /**
          * @brief Constructor *with* terminal states.
@@ -39,7 +39,7 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
+        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
 
         /**
          * @brief check if attributes are well defined.
@@ -53,7 +53,7 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, unsigned _seed = 42);
+        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
 
 
         /**
@@ -63,12 +63,12 @@ namespace mdp
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, unsigned _seed = 42);
+        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
 
         ~FiniteMDP(){};
 
         /**
-         * 3d vector such that mean_rewards[s][a][s'] is the mean reward obtained when the 
+         * 3d vector such that mean_rewards[s][a][s'] is the mean reward obtained when the
          * state s' is reached by taking action a in state s.
          */
         utils::vec::vec_3d mean_rewards;
@@ -106,7 +106,7 @@ namespace mdp
 
         /**
          * State (observation) space
-         */ 
+         */
         spaces::Discrete observation_space;
 
         /**
@@ -116,7 +116,7 @@ namespace mdp
 
         /**
          * @brief Check if _state is terminal
-         * @param _state 
+         * @param _state
          * @return true if _state is terminal, false otherwise
          */
         bool is_terminal(int _state);
@@ -125,20 +125,20 @@ namespace mdp
          * Object to store history of calls to step().
          * @note This object needs to be manually initialized by the user.
          */
-        History<int, int> history; 
+        History<int, int> history;
 
         // Members of base class
 
         /**
          * Current state
-         */ 
+         */
         int state;
         /**
          * MDP identifier
-         */ 
-        std::string id; 
+         */
+        std::string id;
         int reset();
         StepResult<int> step(int action);
-    };  
+    };
 }
 #endif

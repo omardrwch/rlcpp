@@ -2,7 +2,7 @@
 #define __CHAIN_H__
 
 /**
- * @file 
+ * @file
  * @brief Define a N-Chain MDP.
  */
 
@@ -17,15 +17,15 @@ namespace mdp
      * @details In state I, when action 0 is taken, the next state is min(I+1, N-1).
      *                      when action 1 is taken, the next state is max(I-1, 0).
      *          A reward of 1 is obtained when the next state is N-1.
-     * @param N length of the chain.            
-     */ 
+     * @param N length of the chain.
+     */
     class Chain: public FiniteMDP
     {
     public:
         /**
-         * @brief Build chain MDP of length N 
+         * @brief Build chain MDP of length N
          */
-        Chain(int N);
+        Chain(int N, double fail_p=0);
         ~Chain(){};
     };
 }
