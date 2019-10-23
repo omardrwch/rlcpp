@@ -4,13 +4,16 @@
 #include "abstractmdp.h"
 #include "finitemdp.h"
 #include "episodicvi.h"
+#include "abstractalgorithm.h"
 
 namespace online
 {
-class UCBVI
+class UCBVI: public Algorithm
 {
 public:
-    UCBVI(mdp::FiniteMDP& mdp, int horizon, double scale_factor=1, std::string b_type="bernstein");
+    UCBVI(mdp::FiniteMDP& mdp, int horizon,
+          double scale_factor=1, std::string b_type="bernstein",
+          bool save_history=true);
 
     void reset();
 
@@ -20,7 +23,7 @@ public:
 
     void compute_bernstein_bonus(int h,  std::vector<double> Vhp1);
 
-    int run_episode(utils::vec::vec_2d& trueV);
+    int run_episode(const utils::vec::vec_2d& trueV);
 
     void update(int state, int action, double reward, int next_state);
 
@@ -44,6 +47,7 @@ public:
     mdp::EpisodicVI VI;
     double scale_factor;
     std::string b_type;
+    bool save_history;
 
 };
 }

@@ -7,9 +7,9 @@
 namespace online
 {
 UCBVI::UCBVI(mdp::FiniteMDP &mdp, int horizon,
-             double scale_factor, std::string b_type) :
+             double scale_factor, std::string b_type, bool save_history) :
     mdp(mdp), horizon(horizon), VI(mdp::EpisodicVI(mdp, horizon)),
-    scale_factor(scale_factor), b_type(b_type)
+    scale_factor(scale_factor), b_type(b_type), save_history(save_history)
 {
     reset();
 }
@@ -43,9 +43,12 @@ void UCBVI::reset()
         @todo Implement a function history.clear() and call it here.
     */
     // The first parameter in reserve_mem() does not need to be the exact value, it's just for speedup (it is used for calling vector.reserve()).
-    std::vector<std::string> names = {"regret"};
-    mdp.history.reserve_mem(horizon*1000, names.size());
-    mdp.history.set_names(names);
+    if (save_history)
+    {
+        std::vector<std::string> names = {"regret"};
+        mdp.history.reserve_mem(horizon*1000, names.size());
+        mdp.history.set_names(names);
+    }
 }
 
 void UCBVI::get_optimistic_q()
@@ -138,7 +141,7 @@ void UCBVI::compute_bernstein_bonus(int h,  std::vector<double> Vhp1)
     }
 }
 
-int UCBVI::run_episode(utils::vec::vec_2d& trueV)
+int UCBVI::run_episode(const utils::vec::vec_2d& trueV)
 {
     double episode_reward = 0;
     int action;
@@ -148,7 +151,7 @@ int UCBVI::run_episode(utils::vec::vec_2d& trueV)
 
     // True value of the greedy policy wrt Q
     VI.evaluate_policy(policy, Vpi);
-    episode_value.push_back(trueV[0][state] - Vpi[0][state]);
+    episode_value.push_back(Vpi[0][state]);
 
     std::vector<double> extra_vars = {trueV[0][state] - Vpi[0][state]};
 
@@ -163,7 +166,10 @@ int UCBVI::run_episode(utils::vec::vec_2d& trueV)
 
         // ---
         // Update MDP history
-        mdp.history.append(state, action, result.reward, result.next_state, extra_vars, episode);
+        if (save_history)
+        {
+            mdp.history.append(state, action, result.reward, result.next_state, extra_vars, episode);
+        }
         // ---
 
         episode_reward += result.reward;

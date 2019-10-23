@@ -1,11 +1,16 @@
 /*
-    To run this example:
-    $ bash scripts/compile.sh ucbvi_example && ./build/examples/ucbvi_example
+To run this example:
+$ bash scripts/compile.sh ucbvi_example && ./build/examples/ucbvi_example
 */
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
+#include <thread>
+#include <future>
+#include <sstream>
+#include <algorithm>
 #include "mdp.h"
 #include "episodicvi.h"
 #include "ucbvi.h"
@@ -14,53 +19,116 @@
 using namespace std;
 using namespace utils::vec;
 
-std::vector<double> run_simulation(mdp::FiniteMDP& mdp, int horizon, int nb_episodes, vec_2d& trueV,
-                                   double scale_factor, std::string bound_type)
+class WorkerThread
 {
-    double old_regret = 0, episode_regret;
-    int init_state;
-    online::UCBVI algo(mdp, horizon, scale_factor, bound_type);
-    algo.reset();
-    std::vector<double> regret;
-    regret.reserve(nb_episodes+1);
-    regret.push_back(old_regret);
-    for (int k=0; k < nb_episodes; ++k)
+public:
+    WorkerThread(std::string name): name(name) {}
+
+    void operator()(int nb_episodes,
+                    int horizon, double scale_factor, std::string bound_type,
+                    const vec_2d& trueV)
     {
-        if ((k + 1) % 50 == 0)
-        {
-            cout << "Episode = " << (k + 1) << endl;
-            cout << "rewards in last episode = " << algo.all_episode_rewards[algo.all_episode_rewards.size()-1] << endl;
-        }
-        init_state = algo.run_episode(trueV);
-        episode_regret = trueV[0][init_state] - algo.episode_value[k];
-        old_regret = old_regret + episode_regret;
+        mdp::Chain mdp(4, 0.01);
+        // define learning algorithm
+        online::UCBVI algo(mdp, horizon, scale_factor, bound_type, true);
+
+        double old_regret = 0, episode_regret;
+        int init_state;
+        int verbose = 0;
+
+        // initialize regret
+        regret.reserve(nb_episodes+1);
         regret.push_back(old_regret);
-        // cout << endl << "Episode " << k << endl;
-        // for (int s=0; s < mdp.ns; ++s)
-        //   for (int a=0; a<mdp.na; ++a)
-        //   {
-        //     std::cout << s << ", " << a << " ";
-        //     printvec(algo.Phat[s][a]);
-        //     printvec(algo.Rhat[s][a]);
-        //   }
-        // cout << "Policy" << endl;
-        // for (int h=0; h < horizon; ++h) {
-        //   printvec(algo.policy[h]);
-        // }
+
+        algo.reset();
+        for (int k=0; k < nb_episodes; ++k)
+        {
+            if ((verbose > 0) && ((k + 1) % 50 == 0))
+            {
+                cout << "Episode = " << (k + 1) << endl;
+                cout << "rewards in last episode = " << algo.all_episode_rewards[algo.all_episode_rewards.size()-1] << endl;
+            }
+            init_state = algo.run_episode(trueV);
+            episode_regret = trueV[0][init_state] - algo.episode_value[k];
+            old_regret = old_regret + episode_regret;
+            regret.push_back(old_regret);
+        }
+        // Save history
+        mdp.history.to_csv("data/" + name + ".csv");
     }
-    return regret;
+
+    std::vector<double> regret;
+    std::string name;
+};
+
+
+void run_par_simulations(int nb_simulations,
+                         int nb_episodes,
+                         int horizon, double scale_factor, std::string bound_type,
+                         vec_2d& trueV)
+{
+    unsigned int c = std::thread::hardware_concurrency();
+    std::cout << "Number of cores: " << c << endl;
+    std::vector<std::thread> threadList;
+    std::vector<WorkerThread> workerList;
+    for(int i = 0; i < nb_simulations; i++)
+    {
+        std::ostringstream ss;
+        ss << "ucbvi_chain_" << bound_type << "_" << i;
+        workerList.push_back(WorkerThread(ss.str()));
+    }
+    for(int i = 0; i < workerList.size(); i++)
+    {
+        threadList.push_back(
+            std::thread(
+                std::ref(workerList[i]),
+                nb_episodes,
+                horizon, scale_factor, bound_type,
+                std::ref(trueV)
+            )
+        );
+    }
+
+    // std::for_each(threadList.begin(),threadList.end(), std::mem_fn(&std::thread::join));
+    for(int i = 0; i < nb_simulations; i++)
+    {
+        if (threadList[i].joinable())
+            threadList[i].join();
+    }
+
+    std::cout << "All threads have finished" << std::endl;
+
+    std::string output_file = "data/ucbvi_chain_" + bound_type + ".csv";
+    std::ofstream myfp(output_file);
+
+    if (myfp.is_open())
+    {
+        for (int k=0; k<nb_episodes; ++k )
+        {
+            for(int i = 0; i < nb_simulations; i++)
+            {
+                myfp << workerList[i].regret[k];
+                if (i < nb_simulations - 1)
+                    myfp << ",";
+            }
+            myfp << endl;
+        }
+        myfp.close();
+    }
 }
+
 
 int main(void)
 {
     /*   Defining a simple MDP with 3 states and 2 actions  */
+    std::srand(4);
+
+    int horizon = 10;
+    double scale_factor = 0.1;
+    std::string bound_type = "bernstein";;
 
     mdp::Chain mdp(4);
     cout << mdp.id << endl << endl;
-
-    int horizon = 4;
-    double scale_factor = 1;
-    std::string bound_type = "hoeffding";
 
     // compute true value function
     mdp::EpisodicVI vi(mdp, horizon);
@@ -73,13 +141,8 @@ int main(void)
     }
 
 
+    run_par_simulations(1, 3000, horizon, scale_factor, bound_type, trueV);
 
-    // run simulation
-    std::vector<double> regret = run_simulation(mdp, horizon, 3000, trueV,
-                                 scale_factor, bound_type);
-
-    // Save history
-    mdp.history.to_csv("data/ucbvi_" + bound_type + ".csv");
 
     return 0;
 }
