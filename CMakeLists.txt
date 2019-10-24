@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(RLCPP)
 
-# enable warnings 
+# enable warnings
 # (see https://cmake.org/cmake/help/latest/command/add_compile_options.html)
 # add_compile_options(-Wall)
 
