@@ -16,10 +16,11 @@ namespace mdp
 
     void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = 42 */)
     {
-      if (_seed < 1) {
-        _seed = std::rand();
-        std::cout << _seed << std::endl;
-      }
+        if (_seed < 1) 
+        {
+            _seed = std::rand();
+            // std::cout << _seed << std::endl;
+        }
 
         mean_rewards = _mean_rewards;
         transitions = _transitions;
@@ -43,10 +44,11 @@ namespace mdp
 
     void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = 42 */)
     {
-      if (_seed < 1) {
-        _seed = std::rand();
-        std::cout << _seed << std::endl;
-      }
+        if (_seed < 1) 
+        {
+            _seed = std::rand();
+            // std::cout << _seed << std::endl;
+        }
 
         mean_rewards = _mean_rewards;
         transitions = _transitions;

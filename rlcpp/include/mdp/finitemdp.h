@@ -27,7 +27,7 @@ namespace mdp
          * @param _mean_rewards
          * @param _transitions
          * @param _default_state index of the default state
-         * @param _seed random seed
+         * @param _seed random seed. If seed < 1, a random seed is selected by calling std::rand().
          */
         void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
 
@@ -37,7 +37,7 @@ namespace mdp
          * @param _transitions
          * @param _terminal_states vector containing the indices of the terminal states
          * @param _default_state index of the default state
-         * @param _seed random seed
+         * @param _seed random seed. If seed < 1, a random seed is selected by calling std::rand().
          */
         void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
 
