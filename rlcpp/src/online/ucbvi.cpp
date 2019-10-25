@@ -98,7 +98,7 @@ void UCBVI::get_optimistic_q()
 
                 }
                 // truncate value function
-                V[h][s] = std::min((double)horizon, V[h][s]);
+                V[h][s] = std::min((double)(horizon - h + 2), V[h][s]);
             }
         }
     }
