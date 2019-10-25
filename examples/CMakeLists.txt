@@ -7,6 +7,9 @@ include_directories(${RLCPP_SOURCE_DIR}/rlcpp/include/mdp
                     ${RLCPP_SOURCE_DIR}/rlcpp/include/utils)
 
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 add_executable(debug debug.cpp)
 target_link_libraries(debug rlcpp)
 
@@ -17,7 +20,7 @@ add_executable(vi_example vi_example.cpp)
 target_link_libraries(vi_example rlcpp)
 
 add_executable(ucbvi_example ucbvi_example.cpp)
-target_link_libraries(ucbvi_example rlcpp)
+target_link_libraries(ucbvi_example rlcpp ${CMAKE_THREAD_LIBS_INIT})
 
 # add_executable(subapp1 subapp1/main.cpp)
 # target_link_libraries(subapp1 rlcpp)
