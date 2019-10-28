@@ -46,6 +46,14 @@ int main(void)
         if (step_result.done) break;
     }
 
+
+    // If we clear the history, nothing is printed, of course :) 
+    // mdp.history.clear();
+    // std::cout << "states size: " << mdp.history.states.size() << std::endl;
+    // std::cout << "actions size: " << mdp.history.actions.size() << std::endl;
+    // std::cout << "rewards size: " << mdp.history.rewards.size() << std::endl;
+    // std::cout << "next states size: " << mdp.history.next_states.size() << std::endl;
+
     // print history
     mdp.history.print(max_t);
 
@@ -74,14 +82,6 @@ int main(void)
         mdp::StepResult<std::vector<double>> step_result = env.step(action);
         env.history.append(cstate, action, step_result.reward, step_result.next_state);
     }
-
-
-    // If we clear the history, nothing is printed, of course :) 
-    env.history.clear();
-    std::cout << "states size: " << env.history.states.size() << std::endl;
-    std::cout << "actions size: " << env.history.actions.size() << std::endl;
-    std::cout << "rewards size: " << env.history.rewards.size() << std::endl;
-    std::cout << "next states size: " << env.history.next_states.size() << std::endl;
 
 
     // print history

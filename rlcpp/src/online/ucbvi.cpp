@@ -45,6 +45,7 @@ namespace online
         // The first parameter in reserve_mem() does not need to be the exact value, it's just for speedup (it is used for calling vector.reserve()).
         if (save_history)
         {
+            if (mdp.history.length > 0) mdp.history.clear();
             std::vector<std::string> names = {"regret"};
             mdp.history.reserve_mem(horizon*10000, names.size());
             mdp.history.set_names(names);
