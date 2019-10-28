@@ -14,7 +14,12 @@ using namespace std;
 
 int main(void)
 {
-    /*   Defining a simple MDP with 3 states and 2 actions  */
+    /*   
+
+            Defining a simple MDP with 3 states and 2 actions  
+
+            
+    */
 
     mdp::Chain mdp(20);
     cout << mdp.id << endl << endl;
@@ -47,6 +52,15 @@ int main(void)
     // save history in csv file
     mdp.history.to_csv("data/temp.csv");
 
+    
+    /* 
+    
+    
+        A continuous MDP: mountain car
+    
+    
+     */
+
     mdp::MountainCar env;
     std::cout << env.id << std::endl;
 
@@ -61,8 +75,17 @@ int main(void)
         env.history.append(cstate, action, step_result.reward, step_result.next_state);
     }
 
-        // print history
-        env.history.print(max_t);
+
+    // If we clear the history, nothing is printed, of course :) 
+    env.history.clear();
+    std::cout << "states size: " << env.history.states.size() << std::endl;
+    std::cout << "actions size: " << env.history.actions.size() << std::endl;
+    std::cout << "rewards size: " << env.history.rewards.size() << std::endl;
+    std::cout << "next states size: " << env.history.next_states.size() << std::endl;
+
+
+    // print history
+    env.history.print(max_t);
 
     return 0;
 }

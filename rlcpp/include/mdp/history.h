@@ -37,6 +37,51 @@ namespace mdp
     template <typename S, typename A> 
     class History
     {
+    public:
+        /**
+         * Append transition (with no extra variables).
+         * @param _state 
+         * @param _action
+         * @param _reward
+         * @param _next_state
+         * @param _episode number of the episode, zero by default.
+         */
+        void append(S _state, A _action, double _reward, S _next_state, int _episode = 0);
+    
+        /**
+         * Append transition (with extra variables).
+         * @param _state 
+         * @param _action
+         * @param _reward
+         * @param _next_state
+         * @param _extra_vars vector of doubles of size n_extra_variables
+         * @param _episode number of the episode, zero by default.
+         */
+        void append(S _state, A _action, double _reward, S _next_state, std::vector<double> _extra_vars, int _episode = 0);
+
+        /**
+         * @brief Set extra variables names
+         * @param names vector of string of size n_extra_variables containing the name of each variable.
+         */
+        void set_names(std::vector<std::string> names);
+
+        /**
+         * @brief Print first N entries in the history
+         * @param N number of entries to print
+         */
+        void print(unsigned int N);
+
+        /**
+         * @brief Write csv file with history
+         * @param filename example: "myfile.csv"
+         */
+        void to_csv(std::string filename);
+
+        /**
+         * @brief clear all stored data
+         */
+        void clear();
+
     private:
         /* data */
     public:
@@ -96,45 +141,6 @@ namespace mdp
          * Vector of extra variables
          */
         std::vector<NamedDoubleVec> extra_variables;
-
-        /**
-         * Append transition (with no extra variables).
-         * @param _state 
-         * @param _action
-         * @param _reward
-         * @param _next_state
-         * @param _episode number of the episode, zero by default.
-         */
-        void append(S _state, A _action, double _reward, S _next_state, int _episode = 0);
-    
-        /**
-         * Append transition (with extra variables).
-         * @param _state 
-         * @param _action
-         * @param _reward
-         * @param _next_state
-         * @param _extra_vars vector of doubles of size n_extra_variables
-         * @param _episode number of the episode, zero by default.
-         */
-        void append(S _state, A _action, double _reward, S _next_state, std::vector<double> _extra_vars, int _episode = 0);
-
-        /**
-         * @brief Set extra variables names
-         * @param names vector of string of size n_extra_variables containing the name of each variable.
-         */
-        void set_names(std::vector<std::string> names);
-
-        /**
-         * @brief Print first N entries in the history
-         * @param N number of entries to print
-         */
-        void print(unsigned int N);
-
-        /**
-         * @brief Write csv file with history
-         * @param filename example: "myfile.csv"
-         */
-        void to_csv(std::string filename);
     };
     
 
@@ -202,6 +208,7 @@ namespace mdp
         }    
         length += 1;
     }
+
     template <typename S, typename A> 
     void History<S, A>::set_names(std::vector<std::string> names)
     {
@@ -212,6 +219,23 @@ namespace mdp
         }
     }
 
+    template <typename S, typename A> 
+    void History<S, A>::clear()
+    {
+        states.clear();
+        actions.clear();
+        next_states.clear();
+        rewards.clear();
+        episodes.clear();
+        if (n_extra_variables > 0)
+        {
+            for(int i = 0; i < n_extra_variables; i++)
+            {
+                extra_variables[i].data.clear();
+            }
+        }
+        length = 0;
+    }
 }
 
 #endif
