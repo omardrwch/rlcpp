@@ -46,7 +46,7 @@ StepResult<std::vector<double>> MountainCar::step(int action)
     double p = state[position];
     double v = state[velocity];
 
-    v += (action-1)*force + cos(3*p)*(-gravity);
+    v += (action-1)*force + std::cos(3*p)*(-gravity);
     v = utils::clamp(v, lo[velocity], hi[velocity]);
     p += v;
     p = utils::clamp(p, lo[position], hi[position]);

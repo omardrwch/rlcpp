@@ -15,13 +15,13 @@
 namespace utils
 {
 
-// this should be defined in C++17
-template<class T>
-constexpr const T& clamp( const T& v, const T& lo, const T& hi )
-{
-    assert( !(hi < lo) );
-    return (v < lo) ? lo : (hi < v) ? hi : v;
-}
+    // this should be defined in C++17
+    template<class T>
+    constexpr const T& clamp( const T& v, const T& lo, const T& hi )
+    {
+        assert( !(hi < lo) );
+        return (v < lo) ? lo : (hi < v) ? hi : v;
+    }
 }
 
 #endif
