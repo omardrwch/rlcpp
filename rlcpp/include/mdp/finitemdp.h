@@ -14,6 +14,9 @@
 
 namespace mdp
 {
+    /**
+     * Base class for Finite Markov Decision Processes.
+     */ 
     class FiniteMDP: public MDP<int, int>
     {
     protected:

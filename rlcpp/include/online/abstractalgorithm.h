@@ -5,15 +5,23 @@
 
 namespace online
 {
+  /**
+   * @brief Abstract class for online RL algorithms.
+   */
   class Algorithm
   {
   public:
       Algorithm(/* args */){};
       ~Algorithm(){};
 
+      /**
+       * @brief Reset algorithm
+       */
       virtual void reset()=0;
-      virtual int run_episode(const utils::vec::vec_2d& trueV) = 0;
-
+      /**
+       * @brief Run one episode.
+       */
+      virtual int run_episode()=0;
   };
 }
 #endif

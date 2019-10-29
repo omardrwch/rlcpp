@@ -33,7 +33,7 @@ namespace online
         all_episode_rewards.clear();
         episode_value.clear();
 
-        /** Initialize MDP history
+        /* Initialize MDP history
          - horizon*1000 is a rough estimate of the number of total timesteps (=horizon*number_of_episodes)
         - _n_extra_variables is the number of extra variables to be stored
         - names is a vector of strings contaning the name of each extra variable
@@ -142,6 +142,12 @@ namespace online
                 bonus[h][s][a] = scale_factor * (T1 + T2);
             }
         }
+    }
+
+    int UCBVI::run_episode()
+    {
+        utils::vec::vec_2d zeros = utils::vec::get_zeros_2d(horizon, mdp.ns);
+        return run_episode(zeros);
     }
 
     int UCBVI::run_episode(const utils::vec::vec_2d& trueV)

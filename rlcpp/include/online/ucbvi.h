@@ -14,6 +14,13 @@ namespace online
 class UCBVI: public Algorithm
 {
     public:
+        /**
+         * @param mdp: environment in which to run UCBVI
+         * @param horizon horizon H
+         * @param scale_factor factor by which to multiply the exploration bonus
+         * @param b_type type of bonus. must be "hoeffding" or "bernstein"
+         * @param save_history if true, save transtitions and regret in mdp.history
+         */
         UCBVI(mdp::FiniteMDP& mdp, int horizon,
             double scale_factor=1, std::string b_type="bernstein",
             bool save_history=true);
@@ -33,8 +40,8 @@ class UCBVI: public Algorithm
         /**
          * @brief Compute Hoeffding exploration bonus.
          * @details
-         *      bonus(x, a) = scale_factor* 7 * H * L * sqrt*(1 / #(visits to (x,a)))
-         *      where L = log(5*S*A*max(1, #visits to (x,a))/delta)
+         *      bonus(x, a) = scale_factor* 7 * H * L * sqrt*(1 / (visits to (x,a)))
+         *      where L = log(5*S*A*max(1, visits to (x,a))/delta)
          */
         void compute_hoeffding_bonus();
 
@@ -47,7 +54,13 @@ class UCBVI: public Algorithm
 
         /**
          * @brief Run one episode
-         * @param trueV True value functions. Vector of dimensions (horizon x number of states)
+         */
+        int run_episode();
+
+        /**
+         * @brief Run one episode
+         * @param trueV True value functions. Vector of dimensions (horizon x number of states). 
+         * Used to compute the regret.
          */
         int run_episode(const utils::vec::vec_2d& trueV);
 

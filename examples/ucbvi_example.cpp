@@ -49,6 +49,7 @@ public:
                 cout << "rewards in last episode = " << algo.all_episode_rewards[algo.all_episode_rewards.size()-1] << endl;
             }
             init_state = algo.run_episode(trueV);
+
             episode_regret = trueV[0][init_state] - algo.episode_value[k];
             old_regret = old_regret + episode_regret;
             regret.push_back(old_regret);

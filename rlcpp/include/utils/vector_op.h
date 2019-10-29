@@ -75,7 +75,14 @@ namespace utils
             }
             std::cout << "}" << std::endl;
         }
+
+        /**
+         * @brief Print vector of double
+         */
         template void printvec<double>(std::vector<double>);
+        /**
+         * @brief Print vector of int
+         */
         template void printvec<int>(std::vector<int>);
 
         /**
