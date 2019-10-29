@@ -18,17 +18,31 @@ int main(void)
 {
     /*   
 
-            Defining a GridWorld
+        Defining a GridWorld
             
     */
    
     double fail_prob = 0.0;  // failure probability
     double sigma = 0.1;       // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
-    mdp::GridWorld mdp(10, 5, fail_prob, sigma);
+    mdp::GridWorld mdp(4, 4, fail_prob, sigma);
     cout << endl << mdp.id << endl;
 
     // render 
     mdp.render();
+
+    /*   
+
+        Take some steps
+            
+    */
+   cout << "Right " << endl;
+   mdp.step(1);
+   mdp.render();
+
+   cout << "Down " << endl;
+   mdp.step(3);
+   mdp.render();
+
 
     /*   
 
@@ -43,6 +57,8 @@ int main(void)
     
     std::cout << "Value function at h = 0: " << std::endl;
     mdp.render_values(vi.V[0]);
+
+
 
     // cout << "Value function" << endl;
     // for (int h=0; h<=horizon; h++)
