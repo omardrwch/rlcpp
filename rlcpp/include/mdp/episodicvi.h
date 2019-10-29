@@ -34,7 +34,13 @@ namespace mdp
              */
             void evaluate_policy(utils::vec::ivec_2d pi, utils::vec::vec_2d& Vpi);
         protected:
+            /**
+             * MDP object.
+             */
             FiniteMDP& mdp;
+            /**
+             * Horizon H.
+             */
             int horizon;
 
         public:

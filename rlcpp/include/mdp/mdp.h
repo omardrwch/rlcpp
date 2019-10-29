@@ -8,7 +8,8 @@
 #include "history.h"
 
 /**
- * @file Gather all mdp headers.
+ * @file 
+ * All mdp headers.
  */
 
 

@@ -9,48 +9,56 @@
 
 namespace mdp
 {
-class ContinuousMDP: public MDP<std::vector<double>, int>
-{
-public:
-    ContinuousMDP() {}
-    ~ContinuousMDP() {};
-
-    virtual std::vector<double> reset() = 0;
-    virtual StepResult<std::vector<double>> step(int action) = 0;
-
     /**
-    * State (observation) space
-    */
-    spaces::Box observation_space;
+     * @brief Class for continuous-state MDP with discrete actions.
+     * @details The state space is spaces::Box and the action space is spaces::Discrete
+     */
+    class ContinuousMDP: public MDP<std::vector<double>, int>
+    {
+    public:
+        ContinuousMDP() {}
+        ~ContinuousMDP() {};
 
-    /**
-    *  Action space
-    */
-    spaces::Discrete action_space;
+        virtual std::vector<double> reset() = 0;
+        virtual StepResult<std::vector<double>> step(int action) = 0;
 
-    /**
-    * For random number generation
-    */
-    utils::rand::Random randgen;
+        /**
+        * State (observation) space
+        */
+        spaces::Box observation_space;
 
-    /**
-    * Object to store history of calls to step().
-    * @note This object needs to be manually initialized by the user.
-    */
-    History<std::vector<double>, int> history;
+        /**
+        *  Action space
+        */
+        spaces::Discrete action_space;
 
-    // Members of base class
-    int na;
-    /**
-    * MDP identifier
-    */
-    std::string id;
+        /**
+        * For random number generation
+        */
+        utils::rand::Random randgen;
 
-    /**
-    * Current state
-    */
-    std::vector<double> state;
-};
+        /**
+        * Object to store history of calls to step().
+        * @note This object needs to be manually initialized by the user.
+        */
+        History<std::vector<double>, int> history;
+
+        // Members of base class
+        
+        /**
+         * Number of actions
+         */ 
+        int na;
+        /**
+        * MDP identifier
+        */
+        std::string id;
+
+        /**
+        * Current state
+        */
+        std::vector<double> state;
+    };
 }
 
 #endif
