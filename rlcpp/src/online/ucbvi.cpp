@@ -39,14 +39,13 @@ namespace online
         - names is a vector of strings contaning the name of each extra variable
 
         The history is updated in UCBVI::run_episode()
-
-            @todo Implement a function history.clear() and call it here.
         */
-        // The first parameter in reserve_mem() does not need to be the exact value, it's just for speedup (it is used for calling vector.reserve()).
         if (save_history)
         {
             if (mdp.history.length > 0) mdp.history.clear();
             std::vector<std::string> names = {"regret"};
+            // The first parameter in reserve_mem() does not need to be the exact value, 
+            // it's just for speedup (it is used for calling vector.reserve()).
             mdp.history.reserve_mem(horizon*10000, names.size());
             mdp.history.set_names(names);
         }
@@ -113,7 +112,7 @@ namespace online
             {
                 for (int a=0; a < mdp.na; a++)
                 {
-                    double L = log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
+                    double L = std::log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
                     bonus[h][s][a] = scale_factor * 7 * horizon * L / sqrt(std::max(1, N_sa[s][a]));
                 }
             }
@@ -127,7 +126,7 @@ namespace online
         {
             for (int a=0; a < mdp.na; a++)
             {
-                double L = log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
+                double L = std::log(5 * mdp.ns * mdp.na * std::max(1, N_sa[s][a]) / delta);
                 double n = std::max(1, N_sa[s][a]);
                 double var = 0, mean = 0;
                 for (int sn=0; sn < mdp.ns; ++sn)

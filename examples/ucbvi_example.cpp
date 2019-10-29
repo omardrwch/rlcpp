@@ -130,7 +130,7 @@ int main(void)
 
     int horizon = 10;
     double scale_factor = 1;
-    std::string bound_type = "hoeffding";;
+    std::string bound_type = "bernstein";
 
     mdp::Chain mdp(4);
     cout << mdp.id << endl << endl;
