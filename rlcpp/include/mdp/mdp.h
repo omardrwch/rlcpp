@@ -3,9 +3,12 @@
 
 #include "abstractmdp.h"
 #include "finitemdp.h"
-#include "chain.h"
 #include "space.h"
 #include "history.h"
+#include "chain.h"
+#include "mountaincar.h"
+#include "gridworld.h"
+#include "episodicvi.h"
 
 /**
  * @file 

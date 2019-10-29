@@ -22,6 +22,10 @@ target_link_libraries(vi_example rlcpp)
 add_executable(ucbvi_example ucbvi_example.cpp)
 target_link_libraries(ucbvi_example rlcpp ${CMAKE_THREAD_LIBS_INIT})
 
+add_executable(gridworld_example gridworld_example.cpp)
+target_link_libraries(gridworld_example rlcpp)
+
+
 # add_executable(subapp1 subapp1/main.cpp)
 # target_link_libraries(subapp1 rlcpp)
 
