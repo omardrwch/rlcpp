@@ -23,6 +23,11 @@ namespace mdp
      *           1: right   (col -> col + 1)
      *           2: up      (row -> row - 1)
      *           3: down    (row -> row + 1)
+     * 
+     *   Fail probability:
+     * 
+     *      With probability fail_p, a random action will be taken instead of the chosen action. Note that, even in
+     *      the case of failure, the chosen action can be chosen by chance.
      */
     class GridWorld: public FiniteMDP
     {

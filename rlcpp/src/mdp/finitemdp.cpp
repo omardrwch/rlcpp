@@ -100,7 +100,8 @@ namespace mdp
                     assert(transitions[i][a][j] >= 0.0);
                     sum += transitions[i][a][j];
                 }
-                assert(std::abs(sum - 1.0) <= 1e-16 && "Probabilities must sum to 1");
+                // std::cout << std::abs(sum - 1.0) << std::endl;
+                assert(std::abs(sum - 1.0) <= 1e-12 && "Probabilities must sum to 1");
             }
         }
     }

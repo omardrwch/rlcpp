@@ -22,7 +22,7 @@ int main(void)
             
     */
    
-    double fail_prob = 0.0;  // failure probability
+    double fail_prob = 0.2;  // failure probability
     double sigma = 0.1;       // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
     mdp::GridWorld mdp(4, 4, fail_prob, sigma);
     cout << endl << mdp.id << endl;
@@ -59,19 +59,20 @@ int main(void)
     mdp.render_values(vi.V[0]);
 
 
+    /* 
 
-    // cout << "Value function" << endl;
-    // for (int h=0; h<=horizon; h++)
-    // {
-    //   printvec(vi.V[h]);
-    // }
+        Checking transition probabilities
 
-    // cout << "Policy" << endl;
-    // for (int h=0; h<horizon; h++)
-    // {
-    //   printvec(vi.greedy_policy[h]);
-    // }
-
+    */
+    int state = 0; 
+    std::cout << "Transitions at state " << state << ", action left: " << std::endl;
+    mdp.render_values(mdp.transitions[state][0]);
+    std::cout << "Transitions at state " << state << ", action right: " << std::endl;
+    mdp.render_values(mdp.transitions[state][1]);
+    std::cout << "Transitions at state " << state << ", action up: " << std::endl;
+    mdp.render_values(mdp.transitions[state][2]);
+    std::cout << "Transitions at state " << state << ", action down: " << std::endl;
+    mdp.render_values(mdp.transitions[state][3]);
 
     return 0;
 }
