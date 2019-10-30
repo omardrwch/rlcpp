@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 #ifndef __RLCPP_H__
-#define __EPISODICVI_H__ 
+#define __RLCPP_H__ 
 #ifndef __SPACE_H__
 #define __SPACE_H__
 

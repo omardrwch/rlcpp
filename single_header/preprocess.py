@@ -23,7 +23,7 @@ Create header file to be used by acme.py
 
 """
 
-header_contents = "#ifndef __RLCPP_H__ \n#define __EPISODICVI_H__ \n"
+header_contents = "#ifndef __RLCPP_H__ \n#define __RLCPP_H__ \n"
 
 # List all source files
 source_dir = dir_destination
@@ -31,7 +31,7 @@ source_files = []
 # r=root, d=directories, f = files
 for r, d, f in os.walk(source_dir):
     for filename in f:
-        if '.h' in filename and filename != "rlcpp.h":
+        if '.h' in filename and filename != "rlcpp.hpp":
             print(filename)
             header_contents += "#include " + "\""  + filename + "\"" + "\n"
             
@@ -42,6 +42,6 @@ for r, d, f in os.walk(source_dir):
             header_contents += "#include " + "\""  + filename + "\"" + "\n"
 
 header_contents += "#endif"
-header_file = open(os.path.join(dir_destination, "rlcpp.h"),"w+")
+header_file = open(os.path.join(dir_destination, "rlcpp.hpp"),"w+")
 header_file.write(header_contents)
 header_file.close()

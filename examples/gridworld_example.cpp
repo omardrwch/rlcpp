@@ -6,7 +6,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "rlcpp.h"
+#include "episodicvi.h"
+#include "gridworld.h"
 
 using namespace std;
 using namespace utils::vec;
