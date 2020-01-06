@@ -10,33 +10,37 @@
 #include "space.h"
 #include "utils.h"
 
+using namespace std;
 
 int main(void)
 {
-    utils::vec::vec_2d mat; 
-    int n = 4;
-    int m = 5;
-    for(int i = 0; i < n; i++)
-    {
-        mat.push_back(std::vector<double>());
-        for(int j = 0; j < m; j++)
-        {
-            mat[i].push_back(15.0);
-        }
-    }       
+    // int N = 1000;
+    // vector<double> samples1(N);
+    // vector<double> samples2(N);
 
-    utils::vec::vec_2d lala; 
-    lala = mat; 
 
-    for(int i = 0; i < n; i++)
-    {
-            utils::vec::printvec(lala[i]);
-    }
+    // utils::rand::GaussianNoise gnoise(0.1, 123);
+    // utils::rand::Noise *noise; 
+    // noise = &gnoise; 
+    // // utils::rand::Noise noise; 
 
-    std::cout << lala.size() << std::endl;
-    std::cout << lala[0].size() << std::endl;
+    // for(int i = 0; i < N; i++)  
+    // { 
+    //     samples1[i] = (*noise).sample();
+    //     samples2[i] = (*noise).sample();
+    //     // cout << samples[i] << endl; 
+    // }
+    // cout << endl << "stdev = " << utils::vec::stdev(samples1) << endl; 
+    // cout << endl << "stdev = " << utils::vec::stdev(samples2) << endl; 
+
+    utils::rand::Random randgen(123);
+
+    cout << randgen.sample_gaussian(0, 1) << endl;
+
+    utils::rand::Random second_randgen;
+    second_randgen = randgen;
+    cout << second_randgen.sample_gaussian(0, 1) << endl;
 
 
     return 0;
-
 }

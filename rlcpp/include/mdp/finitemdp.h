@@ -63,6 +63,15 @@ namespace mdp
          */
         bool is_terminal(int _state);
 
+        /**
+         * Set reward noise.
+         * By default, reward noise is always zero. 
+         * To obtain noisy rewards, this function must be called.
+         * When this function is called, the noise randgen is set to FiniteMDP.randgen
+         * @param noise_type "none" or "gaussian"
+         */
+        void set_reward_noise_type(std::string noise_type); 
+
     protected:
         /**
          * @brief Default constructor. Returns a undefined MDP.
@@ -145,6 +154,18 @@ namespace mdp
          * @note This object needs to be manually initialized by the user.
          */
         History<int, int> history;
+
+        /**
+         * Reward noise type. Possible values:
+         * "none"
+         * "gaussian"
+         */
+        std::string reward_noise_type;
+
+        /**
+         * Gaussian noise
+         */
+        utils::rand::GaussianNoise gaussian_noise; 
 
         // Members of base class
 

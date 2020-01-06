@@ -21,57 +21,70 @@ int main(void)
             
     */
    
-    double fail_prob = 0.2;  // failure probability
-    double sigma = 0.1;       // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
-    mdp::GridWorld mdp(4, 4, fail_prob, sigma);
+    double fail_prob = 0.0;  // failure probability
+    double sigma = 0.0;       // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
+    mdp::GridWorld mdp(2, 2, fail_prob, sigma);
+
     cout << endl << mdp.id << endl;
 
     // render 
     mdp.render();
+    cout << endl;
+
+    // set mdp seed
+    mdp.randgen.set_seed(11);
+
+    // set reward noise 
+    mdp.set_reward_noise_type("gaussian"); 
+    mdp.gaussian_noise.sigma = 0.01;
+
+
 
     /*   
 
         Take some steps
             
     */
-   cout << "Right " << endl;
-   mdp.step(1);
-   mdp.render();
+    mdp::StepResult<int> outcome; 
+    cout << "Right " << endl;
+    outcome = mdp.step(1);
+    mdp.render();
+    cout << "Reward = " << outcome.reward  << endl << endl; 
+   
+    cout << "Down " << endl;
+    outcome = mdp.step(3);
+    mdp.render();
+    cout << "Reward = " << outcome.reward << endl << endl; 
 
-   cout << "Down " << endl;
-   mdp.step(3);
-   mdp.render();
+    // /*   
 
-
-    /*   
-
-        Value iteration
+    //     Value iteration
             
-    */   
+    // */   
 
-    int horizon = 10;
-    mdp::EpisodicVI vi(mdp, horizon);
-    vi.run();
+    // int horizon = 10;
+    // mdp::EpisodicVI vi(mdp, horizon);
+    // vi.run();
 
     
-    std::cout << "Value function at h = 0: " << std::endl;
-    mdp.render_values(vi.V[0]);
+    // std::cout << "Value function at h = 0: " << std::endl;
+    // mdp.render_values(vi.V[0]);
 
 
-    /* 
+    // /* 
 
-        Checking transition probabilities
+    //     Checking transition probabilities
 
-    */
-    int state = 0; 
-    std::cout << "Transitions at state " << state << ", action left: " << std::endl;
-    mdp.render_values(mdp.transitions[state][0]);
-    std::cout << "Transitions at state " << state << ", action right: " << std::endl;
-    mdp.render_values(mdp.transitions[state][1]);
-    std::cout << "Transitions at state " << state << ", action up: " << std::endl;
-    mdp.render_values(mdp.transitions[state][2]);
-    std::cout << "Transitions at state " << state << ", action down: " << std::endl;
-    mdp.render_values(mdp.transitions[state][3]);
+    // */
+    // int state = 0; 
+    // std::cout << "Transitions at state " << state << ", action left: " << std::endl;
+    // mdp.render_values(mdp.transitions[state][0]);
+    // std::cout << "Transitions at state " << state << ", action right: " << std::endl;
+    // mdp.render_values(mdp.transitions[state][1]);
+    // std::cout << "Transitions at state " << state << ", action up: " << std::endl;
+    // mdp.render_values(mdp.transitions[state][2]);
+    // std::cout << "Transitions at state " << state << ", action down: " << std::endl;
+    // mdp.render_values(mdp.transitions[state][3]);
 
     return 0;
 }

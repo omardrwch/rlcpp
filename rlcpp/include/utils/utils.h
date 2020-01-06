@@ -3,6 +3,7 @@
 
 #include "vector_op.h"
 #include "random.h"
+#include "noise.h"
 
 /**
  * @file 

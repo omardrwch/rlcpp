@@ -80,7 +80,7 @@ namespace utils
              * @return sample
              */
             double sample_gaussian(double mu, double sigma);
-        };
+        };     
     }
 }
 #endif
