@@ -21,9 +21,9 @@ int main(void)
             
     */
    
-    double fail_prob = 0.25;  // failure probability
-    double sigma = 1.0;      // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
-    mdp::GridWorld mdp(4, 4, fail_prob, sigma);
+    double fail_prob = 0.0;  // failure probability
+    double sigma = 0.0;      // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
+    mdp::GridWorld mdp(2, 2, fail_prob, sigma);
 
     cout << endl << mdp.id << endl;
 
@@ -32,13 +32,14 @@ int main(void)
     cout << endl;
 
     // set mdp seed
-    mdp.randgen.set_seed(11);
+    mdp.set_seed(15);
 
     /*   
 
         Take some steps
             
     */
+
     mdp::StepResult<int> outcome; 
     cout << "Right " << endl;
     outcome = mdp.step(1);

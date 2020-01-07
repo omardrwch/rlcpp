@@ -6,27 +6,27 @@
 
 namespace mdp
 {
-    FiniteMDP::FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
+    FiniteMDP::FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        set_params(_mean_rewards, _transitions, _default_state, _seed);
+        set_params(_reward_function, _transitions, _default_state, _seed);
     }
 
-    FiniteMDP::FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
+    FiniteMDP::FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        set_params(_mean_rewards, _transitions, _terminal_states, _default_state, _seed);
+        set_params(_reward_function, _transitions, _terminal_states, _default_state, _seed);
     }
 
-    void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
+    void FiniteMDP::set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        mean_rewards = _mean_rewards;
+        reward_function = _reward_function;
         transitions = _transitions;
         set_seed(_seed);
         id = "FiniteMDP";
         default_state = _default_state;
 
         check();
-        ns = _mean_rewards.size();
-        na = _mean_rewards[0].size();
+        ns = reward_function.mean_rewards.size();
+        na = reward_function.mean_rewards[0].size();
 
         // observation and action spaces
         observation_space.set_n(ns);
@@ -34,9 +34,9 @@ namespace mdp
         reset();
     }
 
-    void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
+    void FiniteMDP::set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        set_params(_mean_rewards, _transitions, _default_state, _seed);
+        set_params(_reward_function, _transitions, _default_state, _seed);
         terminal_states = _terminal_states;
     }
 
@@ -57,20 +57,20 @@ namespace mdp
     void FiniteMDP::check()
     {
         // Check shape of transitions and rewards
-        assert(mean_rewards.size() > 0);
-        assert(mean_rewards[0].size() > 0);
-        assert(mean_rewards[0][0].size() > 0);
+        assert(reward_function.mean_rewards.size() > 0);
+        assert(reward_function.mean_rewards[0].size() > 0);
+        assert(reward_function.mean_rewards[0][0].size() > 0);
         assert(transitions.size() > 0);
         assert(transitions[0].size() > 0);
         assert(transitions[0][0].size() > 0);
 
         // Check consistency of number of states
-        assert(mean_rewards[0][0].size() == mean_rewards.size());
+        assert(reward_function.mean_rewards[0][0].size() == reward_function.mean_rewards.size());
         assert(transitions[0][0].size() == transitions.size());
-        assert(transitions.size() == mean_rewards.size());
+        assert(transitions.size() == reward_function.mean_rewards.size());
 
         // Check consistency of number of actions
-        assert(mean_rewards[0].size() == transitions[0].size());
+        assert(reward_function.mean_rewards[0].size() == transitions[0].size());
 
         // Check transition probabilities
         for(int i = 0; i < transitions.size(); i++)
@@ -107,7 +107,7 @@ namespace mdp
     {
         // Sample next state
         int next_state = randgen.choice(transitions[state][action]);
-        double reward = mean_rewards[state][action][next_state];
+        double reward = reward_function.sample(state, action, next_state, randgen); 
         bool done = is_terminal(next_state);
         StepResult<int> step_result(next_state, reward, done);
         state = step_result.next_state;

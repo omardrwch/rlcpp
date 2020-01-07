@@ -131,7 +131,7 @@ int main(void)
 
     int horizon = 10;
     double scale_factor = 1;
-    std::string bound_type = "bernstein";
+    std::string bound_type = "hoeffding";
 
     mdp::Chain mdp(4);
     cout << mdp.id << endl << endl;
@@ -148,7 +148,6 @@ int main(void)
 
 
     run_par_simulations(10, 10000, horizon, scale_factor, bound_type, trueV);
-
 
     return 0;
 }

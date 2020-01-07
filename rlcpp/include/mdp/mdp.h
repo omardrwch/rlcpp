@@ -9,6 +9,7 @@
 #include "mountaincar.h"
 #include "gridworld.h"
 #include "episodicvi.h"
+#include "discrete_reward.h"
 
 /**
  * @file 

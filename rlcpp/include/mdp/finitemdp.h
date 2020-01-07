@@ -12,6 +12,7 @@
 #include "abstractmdp.h"
 #include "utils.h"
 #include "history.h"
+#include "discrete_reward.h"
 
 
 namespace mdp
@@ -24,22 +25,22 @@ namespace mdp
 
     public:
         /**
-         * @param _mean_rewards
+         * @param _reward_function object of type DiscreteReward representing the reward function
          * @param _transitions
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
+        FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
 
 
         /**
-         * @param _mean_rewards
+         * @param _reward_function object of type DiscreteReward representing the reward function
          * @param _transitions
          * @param _terminal_states vector containing the indices of the terminal states
          * @param _default_state index of the default state
          * @param _seed random seed
          */
-        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
+        FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
 
         ~FiniteMDP(){};
 
@@ -72,6 +73,12 @@ namespace mdp
          */
         void set_seed(int _seed); 
 
+    private:
+        /**
+         * For random number generation
+         */
+        utils::rand::Random randgen;
+
     protected:
         /**
          * @brief Default constructor. Returns a undefined MDP.
@@ -80,22 +87,22 @@ namespace mdp
 
         /**
          * @brief Constructor *without* terminal states.
-         * @param _mean_rewards
+         * @param _reward_function object of type DiscreteReward representing the reward function
          * @param _transitions
          * @param _default_state index of the default state
          * @param _seed random seed. If seed < 1, a random seed is selected by calling std::rand().
          */
-        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
+        void set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
 
         /**
          * @brief Constructor *with* terminal states.
-         * @param _mean_rewards
+         * @param _reward_function object of type DiscreteReward representing the reward function
          * @param _transitions
          * @param _terminal_states vector containing the indices of the terminal states
          * @param _default_state index of the default state
          * @param _seed random seed. If seed < 1, a random seed is selected by calling std::rand().
          */
-        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
+        void set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
 
         /**
          * @brief check if attributes are well defined.
@@ -103,10 +110,9 @@ namespace mdp
         void check();
     public:
         /**
-         * 3d vector such that mean_rewards[s][a][s'] is the mean reward obtained when the
-         * state s' is reached by taking action a in state s.
+         * DiscreteReward representing the reward function.
          */
-        utils::vec::vec_3d mean_rewards;
+        DiscreteReward reward_function;
 
         /**
          * 3d vector such that transitions[s][a][s'] is the probability of reaching
@@ -118,11 +124,6 @@ namespace mdp
          * Default state
          */
         int default_state;
-
-        /**
-         * For random number generation
-         */
-        utils::rand::Random randgen;
 
         /**
          * Number of states

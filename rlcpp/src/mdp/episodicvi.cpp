@@ -17,7 +17,7 @@ void EpisodicVI::run()
     V = utils::vec::get_zeros_2d(horizon + 1, mdp.ns);
 
     utils::vec::vec_3d& P = mdp.transitions;
-    utils::vec::vec_3d& R = mdp.mean_rewards;
+    utils::vec::vec_3d& R = mdp.reward_function.mean_rewards;
     double tmp;
 
     for(int h=horizon-1; h>=0; h--)
@@ -47,7 +47,7 @@ void EpisodicVI::run()
 void EpisodicVI::evaluate_policy(utils::vec::ivec_2d pi, utils::vec::vec_2d& Vpi)
 {
     utils::vec::vec_3d& P = mdp.transitions;
-    utils::vec::vec_3d& R = mdp.mean_rewards;
+    utils::vec::vec_3d& R = mdp.reward_function.mean_rewards;
 
     for (int s=0; s < mdp.ns; ++s) Vpi[horizon][s] = 0;
 
