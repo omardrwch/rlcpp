@@ -3,6 +3,7 @@ set(CMAKE_BUILD_TYPE Debug)  # Debug or Release. Used for libraries
 # Include headers
 include_directories("include"
                     "include/mdp"
+                    "include/bandit"
                     "include/online"
                     "include/utils")
 

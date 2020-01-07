@@ -21,6 +21,25 @@ namespace utils
          */
         class Random
         {
+        
+        private:
+            /**
+             * Random number generator
+             */
+            std::mt19937 generator;
+            /**
+             * continuous uniform distribution in (0, 1)
+             */ 
+            std::uniform_real_distribution<double> real_unif_dist;       
+            /**
+             *  standard normal distribution
+             */
+            std::normal_distribution<double> gaussian_dist;
+            /**
+             * Seed for the std::mt19937 generator.
+             */
+            unsigned seed;
+
         public:
             /**
              * @brief Initializes object with given seed.
@@ -30,30 +49,10 @@ namespace utils
             ~Random(){};
 
             /**
-             * Seed for the std::mt19937 generator.
-             */
-            unsigned seed;
-
-            /**
              * @brief Set seed for random number generator
              * @param _seed
              */
             void set_seed(unsigned _seed);
-            
-            /**
-             * Random number generator
-             */
-            std::mt19937 generator;
-
-            /**
-             * continuous uniform distribution in (0, 1)
-             */ 
-            std::uniform_real_distribution<double> real_unif_dist;       
-
-            /**
-             *  standard normal distribution
-             */
-            std::normal_distribution<double> gaussian_dist;
 
             /**
              * @brief Sample according to probability vector.

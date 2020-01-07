@@ -7,40 +7,41 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <cmath>
 #include "space.h"
 #include "utils.h"
+#include "bandit.h"
 
 using namespace std;
 
+
+double f(double x)
+{
+    return std::sin(x);
+}
+
 int main(void)
 {
-    // int N = 1000;
-    // vector<double> samples1(N);
-    // vector<double> samples2(N);
+    // int N = 10000;
+    // bandit::GaussianArm arm(1.0, 0.1);
+    // vector<double> samples(N);
 
-
-    // utils::rand::GaussianNoise gnoise(0.1, 123);
-    // utils::rand::Noise *noise; 
-    // noise = &gnoise; 
-    // // utils::rand::Noise noise; 
-
-    // for(int i = 0; i < N; i++)  
-    // { 
-    //     samples1[i] = (*noise).sample();
-    //     samples2[i] = (*noise).sample();
-    //     // cout << samples[i] << endl; 
+    // for(int i=0; i< N; i++) 
+    // {
+    //    samples[i] = arm.sample();
     // }
-    // cout << endl << "stdev = " << utils::vec::stdev(samples1) << endl; 
-    // cout << endl << "stdev = " << utils::vec::stdev(samples2) << endl; 
 
-    utils::rand::Random randgen(123);
+    // cout << "mean = " << utils::vec::mean(samples) << endl;
+    // cout << "sigma = " << utils::vec::stdev(samples) << endl;
 
-    cout << randgen.sample_gaussian(0, 1) << endl;
+    vector<double> xvalues{ 0.1, 0.5, 1.0 };
+    double sigma = 0.01;
+    bandit::DiscreteLipschitzBandit lipschitz_bandit(f, 1, xvalues, sigma);
 
-    utils::rand::Random second_randgen;
-    second_randgen = randgen;
-    cout << second_randgen.sample_gaussian(0, 1) << endl;
+    cout << (*lipschitz_bandit.F)(3.1415926535/2) << endl;
 
+    for(int i = 0; i < xvalues.size(); i++)
+        cout << lipschitz_bandit.arms[i].sample() << endl;
 
     return 0;
 }

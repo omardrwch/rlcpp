@@ -1,7 +1,7 @@
 ## TODO 
 
-* reward class to handle noisy rewards
-* bandit class (implement and test)
+* reward class to handle noisy rewards  (OK)
+* bandit class (implement and test)     
 * cartpole class (implement and test)
 * write tests for value iteration
 * write tests for gridworld
