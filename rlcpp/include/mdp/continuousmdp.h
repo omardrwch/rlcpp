@@ -49,6 +49,7 @@ namespace mdp
          * Number of actions
          */ 
         int na;
+        
         /**
         * MDP identifier
         */

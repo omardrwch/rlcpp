@@ -41,9 +41,6 @@ namespace mdp
         observation_space.generator.seed(_seed+123);
         action_space.generator.seed(_seed+456);
         reset();
-
-        // reward noise 
-        reward_noise_type = "none";
     }
 
     void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
@@ -73,9 +70,6 @@ namespace mdp
 
         terminal_states = _terminal_states;
         reset();
-
-        // reward noise 
-        reward_noise_type = "none";
     }
 
     void FiniteMDP::check()
@@ -132,22 +126,9 @@ namespace mdp
         // Sample next state
         int next_state = randgen.choice(transitions[state][action]);
         double reward = mean_rewards[state][action][next_state];
-        if (reward_noise_type != "none") 
-        {   
-            if (reward_noise_type == "gaussian") reward += gaussian_noise.sample();
-            else std::cerr << "Warning: reward_noise_type not recognized.";
-        }
-    
         bool done = is_terminal(next_state);
         StepResult<int> step_result(next_state, reward, done);
         state = step_result.next_state;
         return step_result;
-    }
-
-    void FiniteMDP::set_reward_noise_type(std::string noise_type)
-    {
-        reward_noise_type = noise_type;
-        if (reward_noise_type == "gaussian") gaussian_noise.randgen = randgen;
-        else std::cerr << "Warning: reward_noise_type not recognized.";
     }
 }

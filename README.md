@@ -49,3 +49,5 @@ $ bash scripts/run_tests.sh
 When an MDP object is called sequentially, it can store its transitions (state, action, next_state, reward) in an object of the class ``mdp::History``. These data can be saved in csv file, and its easier to visualize its contents using Python (plot rewards, visualize exploration etc.).
 
 Scrips for analysis are in the folder `python`.
+
+
