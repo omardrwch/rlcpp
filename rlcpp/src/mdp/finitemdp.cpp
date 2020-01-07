@@ -18,15 +18,9 @@ namespace mdp
 
     void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        if (_seed < 1) 
-        {
-            _seed = std::rand();
-            // std::cout << _seed << std::endl;
-        }
-
         mean_rewards = _mean_rewards;
         transitions = _transitions;
-        randgen.set_seed(_seed);
+        set_seed(_seed);
         id = "FiniteMDP";
         default_state = _default_state;
 
@@ -37,13 +31,16 @@ namespace mdp
         // observation and action spaces
         observation_space.set_n(ns);
         action_space.set_n(na);
-        // seeds for spaces
-        observation_space.generator.seed(_seed+123);
-        action_space.generator.seed(_seed+456);
         reset();
     }
 
     void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
+    {
+        set_params(_mean_rewards, _transitions, _default_state, _seed);
+        terminal_states = _terminal_states;
+    }
+
+    void FiniteMDP::set_seed(int _seed)
     {
         if (_seed < 1) 
         {
@@ -51,25 +48,10 @@ namespace mdp
             // std::cout << _seed << std::endl;
         }
 
-        mean_rewards = _mean_rewards;
-        transitions = _transitions;
         randgen.set_seed(_seed);
-        id = "FiniteMDP";
-        default_state = _default_state;
-
-        check();
-        ns = _mean_rewards.size();
-        na = _mean_rewards[0].size();
-
-        // observation and action spaces
-        observation_space.set_n(ns);
-        action_space.set_n(na);
         // seeds for spaces
         observation_space.generator.seed(_seed+123);
         action_space.generator.seed(_seed+456);
-
-        terminal_states = _terminal_states;
-        reset();
     }
 
     void FiniteMDP::check()

@@ -63,6 +63,15 @@ namespace mdp
          */
         bool is_terminal(int _state);
 
+        /**
+         * Set the seed of randgen and seed of action space and observation space
+         * The seed of randgen is set to _seed, the seed of action space is set to _seed+123
+         * and the seed of observation space is set to _seed+456
+         * Note: If _seed < 1,  we set _seed = std::rand()
+         * @param _seed
+         */
+        void set_seed(int _seed); 
+
     protected:
         /**
          * @brief Default constructor. Returns a undefined MDP.
