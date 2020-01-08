@@ -22,17 +22,20 @@ int main(void)
     */
    
     double fail_prob = 0.0;  // failure probability
-    double sigma = 0.0;      // reward = exp( - dist(next_state, goal_state)^2 / sigma^2)
-    mdp::GridWorld mdp(2, 2, fail_prob, sigma);
+    double reward_smoothness = 0.0;      // reward = exp( - dist(next_state, goal_state)^2 / reward_smoothness^2)
+    double sigma = 0.1;  // reward noise (Gaussian)
+    mdp::GridWorld mdp(2, 2, fail_prob, reward_smoothness, sigma);
 
     cout << endl << mdp.id << endl;
+    cout << endl << mdp.reward_function.noise_type << endl;
+
 
     // render 
     mdp.render();
     cout << endl;
 
     // set mdp seed
-    mdp.set_seed(15);
+    mdp.set_seed(11);
 
     /*   
 

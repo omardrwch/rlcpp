@@ -81,9 +81,10 @@ namespace mdp
          * @param _nrows number of rows
          * @param _ncols number of columns
          * @param fail_p failure probability (default = 0)
-         * @param sigma variance of the rewards (default = 0)
+         * @param reward_smoothness reward parameter. default = 0, mean_reward[s, a, s'] = exp(-(distance(s', goal_state)/reward_smoothness)^2  )
+         * @param reward_sigma standard deviation of the reward noise. reward(s, a, s') = mean_reward(s, a, s') + reward_sigma*standard_gaussian_noise
          */ 
-        GridWorld(int _nrows, int _ncols, double fail_p = 0, double sigma = 0);
+        GridWorld(int _nrows, int _ncols, double fail_p = 0, double reward_smoothness = 0, double reward_sigma = 0);
         ~GridWorld(){};
     };
     

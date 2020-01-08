@@ -7,16 +7,17 @@
 #include <iomanip>
 #include "gridworld.h"
 #include "utils.h"
+#include "discrete_reward.h"
 
 namespace mdp
 {
-    GridWorld::GridWorld(int _nrows, int _ncols, double fail_p /* = 0 */, double sigma /* = 0 */)
+    GridWorld::GridWorld(int _nrows, int _ncols, double fail_p /* = 0 */, double reward_smoothness /* = 0 */, double reward_sigma /* = 0 */)
     {
         nrows = _nrows;
         ncols = _ncols;
         assert(nrows > 1 && "Invalid number of rows");
         assert(ncols > 1 && "Invalid number of columns");
-        assert(sigma >= 0);
+        assert(reward_smoothness >= 0);
         assert(fail_p >= 0.0 && fail_p <= 1.0);
 
         // Number of states and actions
@@ -51,9 +52,9 @@ namespace mdp
             double squared_distance = std::pow( (1.0*next_state_coord[0]-1.0*goal_coord[0])/(nrows-1) , 2)
                                       + std::pow( (1.0*next_state_coord[1]-1.0*goal_coord[1])/(ncols-1), 2);
             double reward = 0;
-            if (sigma > 0)
+            if (reward_smoothness > 0)
             {
-                reward = std::exp(-squared_distance/std::pow(sigma, 2));
+                reward = std::exp(-squared_distance/std::pow(reward_smoothness, 2));
             }
             else 
             {
@@ -100,7 +101,16 @@ namespace mdp
             }
         }
         // Initialize base class (FiniteMDP)
-        set_params(_rewards, _transitions, _terminal_states);
+        if (reward_sigma == 0)
+            set_params(_rewards, _transitions, _terminal_states);
+        else
+        {
+            std::vector<double> noise_params;
+            noise_params.push_back(reward_sigma);
+            DiscreteReward _reward_function(_rewards, "gaussian", noise_params);
+            set_params(_reward_function, _transitions, _terminal_states);
+        }
+            
         id = "GridWorld";
     }
 
