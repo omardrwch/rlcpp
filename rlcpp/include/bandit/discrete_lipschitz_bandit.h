@@ -20,6 +20,11 @@ namespace bandit
     {
     public:
         /**
+         * Default constructor
+         */
+        DiscreteLipschitzBandit(){};
+
+        /**
          * @param _F a Lipschitz function f(x) that takes a double as input and returns a double.
          * @param _L Lipschitz constant of the function f(x)
          * @param _xvalues vector containing the points [x_1, ..., x_n] such that the means of the n arms are 
@@ -68,28 +73,6 @@ namespace bandit
          */ 
         std::vector<bandit::GaussianArm> arms; 
     };
-
-    DiscreteLipschitzBandit::DiscreteLipschitzBandit(const std::function<double(double)> &_F, 
-                                                     double _L,
-                                                     std::vector<double> _xvalues,
-                                                     double _sigma,
-                                                     int _seed /* = -1 */)
-    {
-        if (_seed < 1) _seed = std::rand();
-        F = &_F;
-        L = _L; 
-        sigma = _sigma;
-        xvalues = _xvalues;
-
-        // Setting up the arms
-        n_arms = _xvalues.size();
-
-        for(int i = 0; i<= n_arms; i++)
-        {
-            means.push_back( (*F)(xvalues[i]) );
-            arms.push_back(bandit::GaussianArm(means[i], sigma, _seed));
-        }   
-    }
 }
 
 

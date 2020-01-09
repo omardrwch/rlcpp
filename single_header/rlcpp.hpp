@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <cmath>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -398,6 +399,25 @@ namespace utils
          */
         class Random
         {
+        
+        private:
+            /**
+             * Random number generator
+             */
+            std::mt19937 generator;
+            /**
+             * continuous uniform distribution in (0, 1)
+             */ 
+            std::uniform_real_distribution<double> real_unif_dist;       
+            /**
+             *  standard normal distribution
+             */
+            std::normal_distribution<double> gaussian_dist;
+            /**
+             * Seed for the std::mt19937 generator.
+             */
+            unsigned seed;
+
         public:
             /**
              * @brief Initializes object with given seed.
@@ -407,30 +427,10 @@ namespace utils
             ~Random(){};
 
             /**
-             * Seed for the std::mt19937 generator.
-             */
-            unsigned seed;
-
-            /**
              * @brief Set seed for random number generator
              * @param _seed
              */
             void set_seed(unsigned _seed);
-            
-            /**
-             * Random number generator
-             */
-            std::mt19937 generator;
-
-            /**
-             * continuous uniform distribution in (0, 1)
-             */ 
-            std::uniform_real_distribution<double> real_unif_dist;       
-
-            /**
-             *  standard normal distribution
-             */
-            std::normal_distribution<double> gaussian_dist;
 
             /**
              * @brief Sample according to probability vector.
@@ -457,7 +457,7 @@ namespace utils
              * @return sample
              */
             double sample_gaussian(double mu, double sigma);
-        };
+        };     
     }
 }
 #endif
@@ -731,6 +731,72 @@ namespace mdp
 }
 
 #endif
+#ifndef __DISCRETE_REWARD_H__
+#define __DISCRETE_REWARD_H__
+
+/**
+ * @file
+ * @brief Contains class for defining rewards in finite MDPs.
+ */
+
+namespace mdp
+{
+    /**
+     * Class for defining reward functions in finite MDPs.
+     */ 
+    class DiscreteReward
+    {
+ 
+    public:
+        /**
+         * Default constructor
+         */
+        DiscreteReward();
+        /**
+         * Create "reward without noise" object
+         * @param _mean_rewards
+         */
+        DiscreteReward(utils::vec::vec_3d _mean_rewards);
+        /**
+         * Create "reward with noise" object
+         * @param _mean_rewards
+         * @param _noise_type 
+         * @param _noise_params
+         */
+        DiscreteReward(utils::vec::vec_3d _mean_rewards, std::string _noise_type, std::vector<double> _noise_params);
+        ~DiscreteReward(){};
+
+        /**
+        * 3d vector such that mean_rewards[s][a][s'] is the mean reward obtained when the
+        * state s' is reached by taking action a in state s.
+        */
+        utils::vec::vec_3d mean_rewards;
+
+        /**
+         * String describing the type of noise
+         * "none": zero noise
+         * "gaussian": zero-mean Gaussian distribution with variance given in noise_params
+         */
+        std::string noise_type;
+
+        /**
+        * Vector of noise parameters
+        * - Gaussian noise: noise_params = [variance]
+        */
+        std::vector<double> noise_params;
+
+        /**
+         * Get a reward sample at (state, action, next_state)
+         * @param state
+         * @param action
+         * @param next_state
+         * @param randgen random number generator for sampling the noise
+         */
+        double sample(int state, int action, int next_state, utils::rand::Random randgen);
+    };
+}
+
+#endif
 #ifndef __FINITEMDP_H__
 #define __FINITEMDP_H__
 
@@ -746,6 +812,62 @@ namespace mdp
      */ 
     class FiniteMDP: public MDP<int, int>
     {
+
+    public:
+        /**
+         * @param _reward_function object of type DiscreteReward representing the reward function
+         * @param _transitions
+         * @param _default_state index of the default state
+         * @param _seed random seed
+         */
+        FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
+
+        /**
+         * @param _reward_function object of type DiscreteReward representing the reward function
+         * @param _transitions
+         * @param _terminal_states vector containing the indices of the terminal states
+         * @param _default_state index of the default state
+         * @param _seed random seed
+         */
+        FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
+
+        ~FiniteMDP(){};
+
+        /**
+         * @brief Set MDP to default_state
+         * @return default_state
+         */
+        int reset();
+
+        /**
+         * @brief take a step in the MDP
+         * @param action action to take
+         * @return StepResult object, contaning next state, reward and 'done' flag
+         */
+        StepResult<int> step(int action);
+
+        /**
+         * @brief Check if _state is terminal
+         * @param _state
+         * @return true if _state is terminal, false otherwise
+         */
+        bool is_terminal(int _state);
+
+        /**
+         * Set the seed of randgen and seed of action space and observation space
+         * The seed of randgen is set to _seed, the seed of action space is set to _seed+123
+         * and the seed of observation space is set to _seed+456
+         * Note: If _seed < 1,  we set _seed = std::rand()
+         * @param _seed
+         */
+        void set_seed(int _seed); 
+
+    private:
+        /**
+         * For random number generation
+         */
+        utils::rand::Random randgen;
+
     protected:
         /**
          * @brief Default constructor. Returns a undefined MDP.
@@ -754,53 +876,32 @@ namespace mdp
 
         /**
          * @brief Constructor *without* terminal states.
-         * @param _mean_rewards
+         * @param _reward_function object of type DiscreteReward representing the reward function
          * @param _transitions
          * @param _default_state index of the default state
          * @param _seed random seed. If seed < 1, a random seed is selected by calling std::rand().
          */
-        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
+        void set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
 
         /**
          * @brief Constructor *with* terminal states.
-         * @param _mean_rewards
+         * @param _reward_function object of type DiscreteReward representing the reward function
          * @param _transitions
          * @param _terminal_states vector containing the indices of the terminal states
          * @param _default_state index of the default state
          * @param _seed random seed. If seed < 1, a random seed is selected by calling std::rand().
          */
-        void set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
+        void set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
 
         /**
          * @brief check if attributes are well defined.
          */
         void check();
     public:
-
         /**
-         * @param _mean_rewards
-         * @param _transitions
-         * @param _default_state index of the default state
-         * @param _seed random seed
+         * DiscreteReward representing the reward function.
          */
-        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state = 0, int _seed = -1);
-
-        /**
-         * @param _mean_rewards
-         * @param _transitions
-         * @param _terminal_states vector containing the indices of the terminal states
-         * @param _default_state index of the default state
-         * @param _seed random seed
-         */
-        FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state = 0, int _seed = -1);
-
-        ~FiniteMDP(){};
-
-        /**
-         * 3d vector such that mean_rewards[s][a][s'] is the mean reward obtained when the
-         * state s' is reached by taking action a in state s.
-         */
-        utils::vec::vec_3d mean_rewards;
+        DiscreteReward reward_function;
 
         /**
          * 3d vector such that transitions[s][a][s'] is the probability of reaching
@@ -812,11 +913,6 @@ namespace mdp
          * Default state
          */
         int default_state;
-
-        /**
-         * For random number generation
-         */
-        utils::rand::Random randgen;
 
         /**
          * Number of states
@@ -844,13 +940,6 @@ namespace mdp
         spaces::Discrete action_space;
 
         /**
-         * @brief Check if _state is terminal
-         * @param _state
-         * @return true if _state is terminal, false otherwise
-         */
-        bool is_terminal(int _state);
-
-        /**
          * Object to store history of calls to step().
          * @note This object needs to be manually initialized by the user.
          */
@@ -866,8 +955,6 @@ namespace mdp
          * MDP identifier
          */
         std::string id;
-        int reset();
-        StepResult<int> step(int action);
     };
 }
 #endif
@@ -1196,6 +1283,7 @@ namespace mdp
          * Number of actions
          */ 
         int na;
+        
         /**
         * MDP identifier
         */
@@ -1354,9 +1442,10 @@ namespace mdp
          * @param _nrows number of rows
          * @param _ncols number of columns
          * @param fail_p failure probability (default = 0)
-         * @param sigma variance of the rewards (default = 0)
+         * @param reward_smoothness reward parameter. default = 0, mean_reward[s, a, s'] = exp(-(distance(s', goal_state)/reward_smoothness)^2  )
+         * @param reward_sigma standard deviation of the reward noise. reward(s, a, s') = mean_reward(s, a, s') + reward_sigma*standard_gaussian_noise
          */ 
-        GridWorld(int _nrows, int _ncols, double fail_p = 0, double sigma = 0);
+        GridWorld(int _nrows, int _ncols, double fail_p = 0, double reward_smoothness = 0, double reward_sigma = 0);
         ~GridWorld(){};
     };
     
@@ -1375,6 +1464,165 @@ namespace mdp
  * @brief Definitions for Markov Decision Processes
  */
 namespace mdp{}
+
+#endif
+#ifndef __ARM_H__
+#define __ARM_H__
+
+/**
+ * @file
+ * @brief Contains classes for defining arms for Multi Armed Bandits problems
+ */
+
+namespace bandit
+{
+    /**
+     * Abstract class for Arm
+     */
+    class Arm
+    {
+    private:
+        /* data */
+    public:
+        Arm(double _mean, int _seed = 42);
+        ~Arm(){};
+
+        /**
+         * Return a sample from the arm distribution.
+         */
+        virtual double sample() = 0;
+
+        /**
+         * mean of the arm distribution
+         */
+        double mean;
+
+        /**
+         * Random number generator
+         */
+        utils::rand::Random randgen; 
+    };
+
+    /**
+     * Gaussian arm with given mean and variance
+     */
+    class GaussianArm: public Arm
+    {
+    private:
+        /* data */
+    public:
+        /**
+         * Initialize Gaussian arm with mean mu and variance sigma^2
+         * @param _mu
+         * @param _sigma
+         * @param _seed for random number generation
+         */
+        GaussianArm(double _mu, double _sigma, int _seed = 42);
+        ~GaussianArm(){};
+
+        /**
+         * Mean
+         */
+        double mu;
+
+        /**
+         * Standard deviation
+         */
+        double sigma; 
+
+        /**
+         * Sample
+         */
+        double sample();
+    };
+}
+
+#endif
+#ifndef __BANDIT_H__
+#define __BANDIT_H__
+
+/**
+ * @file 
+ * All bandit headers.
+ */
+
+/**
+ * @brief Definitions for bandit problems
+ */
+namespace bandit{}
+
+#endif
+#ifndef __DISCRETE_LIPSCHITZ_BANDIT_H__
+#define __DISCRETE_LIPSCHITZ_BANDIT_H__
+
+/**
+ * @file
+ * @brief Implements a class for a Lipschitz bandit problem with a finite number of arms and Gaussian rewards.
+ */ 
+
+namespace bandit
+{
+    /**
+     * @brief Lipschitz bandit problem with a finite number of arms and Gaussian rewards.
+     */
+    class DiscreteLipschitzBandit
+    {
+    public:
+        /**
+         * Default constructor
+         */
+        DiscreteLipschitzBandit(){};
+
+        /**
+         * @param _F a Lipschitz function f(x) that takes a double as input and returns a double.
+         * @param _L Lipschitz constant of the function f(x)
+         * @param _xvalues vector containing the points [x_1, ..., x_n] such that the means of the n arms are 
+         *                 [f(x_1), ..., f(x_n)]
+         * @param _seed
+         */
+        DiscreteLipschitzBandit(const std::function<double(double)> &_F, 
+                                double _L,
+                                std::vector<double> _xvalues,
+                                double _sigma,
+                                int _seed = -1);
+        ~DiscreteLipschitzBandit(){};
+
+        /**
+         * Lipschitz function f(x)
+         */
+        const std::function<double(double)> *F;
+
+        /**
+         * Lipschitz constant of f(x)
+         */
+        double L;
+
+        /**
+         * Vector containing the points [x_1, ..., x_n] such that the means of the n arms are [f(x_1), ..., f(x_n)]
+         */
+        std::vector<double> xvalues;
+
+        /**
+         * Starndard deviation of the Gaussian noise.
+         */
+        double sigma;
+
+        /**
+         * Number of arms
+         */
+        int n_arms;
+
+        /**
+         * Vector containing the mean of each arm.
+         */
+        std::vector<double> means;
+
+        /**
+         * Vector contaning the arms
+         */ 
+        std::vector<bandit::GaussianArm> arms; 
+    };
+}
 
 #endif
 #ifndef __ONLINE_H__
@@ -1596,13 +1844,13 @@ namespace online
 }
 namespace mdp
 {
-    GridWorld::GridWorld(int _nrows, int _ncols, double fail_p /* = 0 */, double sigma /* = 0 */)
+    GridWorld::GridWorld(int _nrows, int _ncols, double fail_p /* = 0 */, double reward_smoothness /* = 0 */, double reward_sigma /* = 0 */)
     {
         nrows = _nrows;
         ncols = _ncols;
         assert(nrows > 1 && "Invalid number of rows");
         assert(ncols > 1 && "Invalid number of columns");
-        assert(sigma >= 0);
+        assert(reward_smoothness >= 0);
         assert(fail_p >= 0.0 && fail_p <= 1.0);
 
         // Number of states and actions
@@ -1637,9 +1885,9 @@ namespace mdp
             double squared_distance = std::pow( (1.0*next_state_coord[0]-1.0*goal_coord[0])/(nrows-1) , 2)
                                       + std::pow( (1.0*next_state_coord[1]-1.0*goal_coord[1])/(ncols-1), 2);
             double reward = 0;
-            if (sigma > 0)
+            if (reward_smoothness > 0)
             {
-                reward = std::exp(-squared_distance/std::pow(sigma, 2));
+                reward = std::exp(-squared_distance/std::pow(reward_smoothness, 2));
             }
             else 
             {
@@ -1686,7 +1934,16 @@ namespace mdp
             }
         }
         // Initialize base class (FiniteMDP)
-        set_params(_rewards, _transitions, _terminal_states);
+        if (reward_sigma == 0)
+            set_params(_rewards, _transitions, _terminal_states);
+        else
+        {
+            std::vector<double> noise_params;
+            noise_params.push_back(reward_sigma);
+            DiscreteReward _reward_function(_rewards, "gaussian", noise_params);
+            set_params(_reward_function, _transitions, _terminal_states);
+        }
+            
         id = "GridWorld";
     }
 
@@ -1803,90 +2060,71 @@ namespace mdp
 }
 namespace mdp
 {
-    FiniteMDP::FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = 42 */)
+    FiniteMDP::FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        set_params(_mean_rewards, _transitions, _default_state, _seed);
+        set_params(_reward_function, _transitions, _default_state, _seed);
     }
 
-    FiniteMDP::FiniteMDP(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = 42 */)
+    FiniteMDP::FiniteMDP(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        set_params(_mean_rewards, _transitions, _terminal_states, _default_state, _seed);
+        set_params(_reward_function, _transitions, _terminal_states, _default_state, _seed);
     }
 
-    void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = 42 */)
+    void FiniteMDP::set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        if (_seed < 1) 
-        {
-            _seed = std::rand();
-            // std::cout << _seed << std::endl;
-        }
-
-        mean_rewards = _mean_rewards;
+        reward_function = _reward_function;
         transitions = _transitions;
-        randgen.set_seed(_seed);
+        set_seed(_seed);
         id = "FiniteMDP";
         default_state = _default_state;
 
         check();
-        ns = _mean_rewards.size();
-        na = _mean_rewards[0].size();
+        ns = reward_function.mean_rewards.size();
+        na = reward_function.mean_rewards[0].size();
 
         // observation and action spaces
         observation_space.set_n(ns);
         action_space.set_n(na);
-        // seeds for spaces
-        observation_space.generator.seed(_seed+123);
-        action_space.generator.seed(_seed+456);
-
         reset();
     }
 
-    void FiniteMDP::set_params(utils::vec::vec_3d _mean_rewards, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = 42 */)
+    void FiniteMDP::set_params(DiscreteReward _reward_function, utils::vec::vec_3d _transitions, std::vector<int> _terminal_states, int _default_state /* = 0 */, int _seed /* = -1 */)
     {
-        if (_seed < 1) 
-        {
-            _seed = std::rand();
-            // std::cout << _seed << std::endl;
-        }
-
-        mean_rewards = _mean_rewards;
-        transitions = _transitions;
-        randgen.set_seed(_seed);
-        id = "FiniteMDP";
-        default_state = _default_state;
-
-        check();
-        ns = _mean_rewards.size();
-        na = _mean_rewards[0].size();
-
-        // observation and action spaces
-        observation_space.set_n(ns);
-        action_space.set_n(na);
-        // seeds for spaces
-        observation_space.generator.seed(_seed+123);
-        action_space.generator.seed(_seed+456);
-
+        set_params(_reward_function, _transitions, _default_state, _seed);
         terminal_states = _terminal_states;
-        reset();
+    }
+
+    void FiniteMDP::set_seed(int _seed)
+    {
+        if (_seed < 1) 
+        {
+            _seed = std::rand();
+            // std::cout << _seed << std::endl;
+        }
+
+        randgen.set_seed(_seed);
+        // seeds for spaces
+        observation_space.generator.seed(_seed+123);
+        action_space.generator.seed(_seed+456);
     }
 
     void FiniteMDP::check()
     {
         // Check shape of transitions and rewards
-        assert(mean_rewards.size() > 0);
-        assert(mean_rewards[0].size() > 0);
-        assert(mean_rewards[0][0].size() > 0);
+        assert(reward_function.mean_rewards.size() > 0);
+        assert(reward_function.mean_rewards[0].size() > 0);
+        assert(reward_function.mean_rewards[0][0].size() > 0);
         assert(transitions.size() > 0);
         assert(transitions[0].size() > 0);
         assert(transitions[0][0].size() > 0);
 
         // Check consistency of number of states
-        assert(mean_rewards[0][0].size() == mean_rewards.size());
+        assert(reward_function.mean_rewards[0][0].size() == reward_function.mean_rewards.size());
         assert(transitions[0][0].size() == transitions.size());
-        assert(transitions.size() == mean_rewards.size());
+        assert(transitions.size() == reward_function.mean_rewards.size());
 
         // Check consistency of number of actions
-        assert(mean_rewards[0].size() == transitions[0].size());
+        assert(reward_function.mean_rewards[0].size() == transitions[0].size());
 
         // Check transition probabilities
         for(int i = 0; i < transitions.size(); i++)
@@ -1923,7 +2161,7 @@ namespace mdp
     {
         // Sample next state
         int next_state = randgen.choice(transitions[state][action]);
-        double reward = mean_rewards[state][action][next_state];
+        double reward = reward_function.sample(state, action, next_state, randgen); 
         bool done = is_terminal(next_state);
         StepResult<int> step_result(next_state, reward, done);
         state = step_result.next_state;
@@ -2101,7 +2339,75 @@ namespace utils
         }
     }
 }
-/*
+namespace mdp
+{
+    DiscreteReward::DiscreteReward()
+    {
+        noise_type = "none";
+    }
+
+    DiscreteReward::DiscreteReward(utils::vec::vec_3d _mean_rewards)
+    {
+        mean_rewards = _mean_rewards;
+        noise_type = "none";
+    }
+
+    DiscreteReward::DiscreteReward(utils::vec::vec_3d _mean_rewards, std::string _noise_type, std::vector<double> _noise_params)
+    {
+        mean_rewards = _mean_rewards;
+        noise_type = _noise_type;
+        noise_params = _noise_params;
+    }
+
+    double DiscreteReward::sample(int state, int action, int next_state, utils::rand::Random randgen)
+    {
+        double mean_r = mean_rewards[state][action][next_state];
+        double noise;
+        if (noise_type == "none")
+            noise = 0;
+        else if(noise_type == "gaussian")
+        {
+            assert(noise_params.size() == 1 && "noise type and noise params are not compatible");
+            noise = randgen.sample_gaussian(0, noise_params[0]);
+        }
+        else
+        {
+            std::cerr << "Invalid noise type in DiscreteReward" << std::endl;
+        }        
+        return mean_r + noise;
+    }
+
+}namespace bandit
+{
+    /*
+
+        Base class
+
+    */
+    Arm::Arm(double _mean, int _seed /* = 42 */)
+    {
+        randgen.set_seed(_seed);
+        mean = _mean;
+    }
+
+    /*
+
+        Gaussian arm
+
+    */
+
+    GaussianArm::GaussianArm(double _mu, double _sigma, int _seed /* = 42 */): Arm(_mu, _seed)
+    {
+        mean = _mu; 
+        mu = _mu;
+        sigma = _sigma;
+    }
+
+    double GaussianArm::sample()
+    {
+        return randgen.sample_gaussian(mu, sigma);
+    }
+}/*
     Following this answer: https://stackoverflow.com/a/13952386/5691288
 */
 
@@ -2214,7 +2520,30 @@ namespace mdp
        std::cout.unsetf(std::ios::fixed | std::ios::scientific);
    }
 }
-namespace utils
+namespace bandit
+{
+    DiscreteLipschitzBandit::DiscreteLipschitzBandit(const std::function<double(double)> &_F, 
+                                                     double _L,
+                                                     std::vector<double> _xvalues,
+                                                     double _sigma,
+                                                     int _seed /* = -1 */)
+    {
+        if (_seed < 1) _seed = std::rand();
+        F = &_F;
+        L = _L; 
+        sigma = _sigma;
+        xvalues = _xvalues;
+
+        // Setting up the arms
+        n_arms = _xvalues.size();
+
+        for(int i = 0; i<= n_arms; i++)
+        {
+            means.push_back( (*F)(xvalues[i]) );
+            arms.push_back(bandit::GaussianArm(means[i], sigma, _seed));
+        }   
+    }
+}namespace utils
 {
     namespace rand
     {
@@ -2376,7 +2705,7 @@ void EpisodicVI::run()
     V = utils::vec::get_zeros_2d(horizon + 1, mdp.ns);
 
     utils::vec::vec_3d& P = mdp.transitions;
-    utils::vec::vec_3d& R = mdp.mean_rewards;
+    utils::vec::vec_3d& R = mdp.reward_function.mean_rewards;
     double tmp;
 
     for(int h=horizon-1; h>=0; h--)
@@ -2406,7 +2735,7 @@ void EpisodicVI::run()
 void EpisodicVI::evaluate_policy(utils::vec::ivec_2d pi, utils::vec::vec_2d& Vpi)
 {
     utils::vec::vec_3d& P = mdp.transitions;
-    utils::vec::vec_3d& R = mdp.mean_rewards;
+    utils::vec::vec_3d& R = mdp.reward_function.mean_rewards;
 
     for (int s=0; s < mdp.ns; ++s) Vpi[horizon][s] = 0;
 
