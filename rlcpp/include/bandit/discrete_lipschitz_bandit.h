@@ -65,11 +65,6 @@ namespace bandit
         double sigma;
 
         /**
-         * Number of arms
-         */
-        int n_arms;
-
-        /**
          * Vector containing the mean of each arm.
          */
         std::vector<double> means;

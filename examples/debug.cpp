@@ -31,5 +31,14 @@ int main(void)
     for(int i = 0; i < xvalues.size(); i++)
         cout << lipschitz_bandit.sample(i) << endl;
 
+
+    cout << "-----" << endl;
+    cout << lipschitz_bandit.n_arms << endl; 
+    bandit::Bandit<int>& test = lipschitz_bandit;
+    cout << test.n_arms << endl; 
+    cout << test.sample(0) << endl; 
+
+
     return 0;
+
 }
