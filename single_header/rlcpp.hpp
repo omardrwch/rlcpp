@@ -1466,6 +1466,43 @@ namespace mdp
 namespace mdp{}
 
 #endif
+#ifndef __ABSTRACTBANDIT_H__
+#define __ABSTRACTBANDIT_H__
+
+/**
+ * @file
+ * @brief Contains abstract class for bandit problems
+ */
+
+namespace bandit
+{
+    /**
+     * @brief Abstract class for bandit problems.
+     * @tparam A type of arm (int for discrete bandits, double for continuous bandits)
+     */
+    template <typename A>
+    class Bandit
+    {
+    private:
+        /* data */
+    public:
+        Bandit(){n_arms = -1;};
+        ~Bandit(){};
+
+        /**
+         * Pull an arm.
+         */
+        virtual double sample(A arm) = 0;
+
+        /**
+         * Number of arms
+         * @note Set to -1 if infinity or undefined.
+         */
+        int n_arms;
+    };    
+}
+
+#endif
 #ifndef __ARM_H__
 #define __ARM_H__
 
@@ -1565,7 +1602,7 @@ namespace bandit
     /**
      * @brief Lipschitz bandit problem with a finite number of arms and Gaussian rewards.
      */
-    class DiscreteLipschitzBandit
+    class DiscreteLipschitzBandit: public Bandit<int>
     {
     public:
         /**
@@ -1586,6 +1623,12 @@ namespace bandit
                                 double _sigma,
                                 int _seed = -1);
         ~DiscreteLipschitzBandit(){};
+
+        /**
+         * Function to sample an arm
+         * @param arm_index index of the arm to be sampled
+         */
+        double sample(int arm_index);
 
         /**
          * Lipschitz function f(x)
@@ -2535,13 +2578,18 @@ namespace bandit
         xvalues = _xvalues;
 
         // Setting up the arms
-        n_arms = _xvalues.size();
+        n_arms = xvalues.size();
 
         for(int i = 0; i<= n_arms; i++)
         {
             means.push_back( (*F)(xvalues[i]) );
             arms.push_back(bandit::GaussianArm(means[i], sigma, _seed));
         }   
+    }
+
+    double DiscreteLipschitzBandit::sample(int arm_index)
+    {
+        return arms[arm_index].sample();
     }
 }namespace utils
 {

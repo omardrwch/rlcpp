@@ -29,7 +29,7 @@ int main(void)
     cout << (*lipschitz_bandit.F)(3.1415926535/2) << endl;
 
     for(int i = 0; i < xvalues.size(); i++)
-        cout << lipschitz_bandit.arms[i].sample() << endl;
+        cout << lipschitz_bandit.sample(i) << endl;
 
     return 0;
 }

@@ -16,7 +16,7 @@ namespace bandit
     /**
      * @brief Lipschitz bandit problem with a finite number of arms and Gaussian rewards.
      */
-    class DiscreteLipschitzBandit
+    class DiscreteLipschitzBandit: public Bandit<int>
     {
     public:
         /**
@@ -37,6 +37,12 @@ namespace bandit
                                 double _sigma,
                                 int _seed = -1);
         ~DiscreteLipschitzBandit(){};
+
+        /**
+         * Function to sample an arm
+         * @param arm_index index of the arm to be sampled
+         */
+        double sample(int arm_index);
 
         /**
          * Lipschitz function f(x)

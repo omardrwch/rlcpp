@@ -24,4 +24,9 @@ namespace bandit
             arms.push_back(bandit::GaussianArm(means[i], sigma, _seed));
         }   
     }
+
+    double DiscreteLipschitzBandit::sample(int arm_index)
+    {
+        return arms[arm_index].sample();
+    }
 }
