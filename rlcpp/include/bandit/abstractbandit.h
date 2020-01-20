@@ -10,9 +10,10 @@ namespace bandit
 {
     /**
      * @brief Abstract class for bandit problems.
-     * @tparam A type of arm (int for discrete bandits, double for continuous bandits)
+     * @tparam A type of arm (int for finite bandits, double for continuous bandits)
+     * @tparam M type of "vector" of means. std::vector<double> for finite bandits, std::function<double(double)> & for continuous bandits
      */
-    template <typename A>
+    template <typename A, typename M>
     class Bandit
     {
     private:
@@ -25,6 +26,11 @@ namespace bandit
          * Pull an arm.
          */
         virtual double sample(A arm) = 0;
+
+        /**
+         * Return means
+         */
+        virtual M get_means() = 0; 
 
         /**
          * Number of arms

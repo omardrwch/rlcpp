@@ -17,7 +17,7 @@ using namespace std;
 
 double f(double x)
 {
-    return std::sin(x);
+    return 0*std::sin(x);
 }
 
 int main(void)
@@ -34,7 +34,7 @@ int main(void)
 
     cout << "-----" << endl;
     cout << lipschitz_bandit.n_arms << endl; 
-    bandit::Bandit<int>& test = lipschitz_bandit;
+    bandit::Bandit<int, std::vector<double>>& test = lipschitz_bandit;
     cout << test.n_arms << endl; 
     cout << test.sample(0) << endl; 
 

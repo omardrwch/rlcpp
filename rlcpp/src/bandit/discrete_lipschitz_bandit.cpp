@@ -20,13 +20,18 @@ namespace bandit
 
         for(int i = 0; i<= n_arms; i++)
         {
-            means.push_back( (*F)(xvalues[i]) );
-            arms.push_back(bandit::GaussianArm(means[i], sigma, _seed));
+            mean_values.push_back( (*F)(xvalues[i]) );
+            arms.push_back(bandit::GaussianArm(mean_values[i], sigma, _seed+i));
         }   
     }
 
     double DiscreteLipschitzBandit::sample(int arm_index)
     {
         return arms[arm_index].sample();
+    }
+
+    std::vector<double> DiscreteLipschitzBandit::get_means()
+    {
+        return mean_values;
     }
 }

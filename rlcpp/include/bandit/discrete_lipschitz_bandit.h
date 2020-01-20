@@ -16,7 +16,7 @@ namespace bandit
     /**
      * @brief Lipschitz bandit problem with a finite number of arms and Gaussian rewards.
      */
-    class DiscreteLipschitzBandit: public Bandit<int>
+    class DiscreteLipschitzBandit: public Bandit<int, std::vector<double>>
     {
     public:
         /**
@@ -45,6 +45,11 @@ namespace bandit
         double sample(int arm_index);
 
         /**
+         * Function to return the vector of arms' means
+         */
+        std::vector<double> get_means();
+
+        /**
          * Lipschitz function f(x)
          */
         const std::function<double(double)> *F;
@@ -58,6 +63,11 @@ namespace bandit
          * Vector containing the points [x_1, ..., x_n] such that the means of the n arms are [f(x_1), ..., f(x_n)]
          */
         std::vector<double> xvalues;
+
+        /**
+         * Vector containing the means  [f(x_1), ..., f(x_n)]
+         */
+        std::vector<double> mean_values;
 
         /**
          * Starndard deviation of the Gaussian noise.
