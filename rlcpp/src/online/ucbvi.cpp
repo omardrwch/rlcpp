@@ -24,7 +24,6 @@ namespace online
         N_sas = utils::vec::get_zeros_i3d(mdp.ns, mdp.na, mdp.ns);
         bonus = utils::vec::get_zeros_3d(horizon, mdp.ns, mdp.na);
 
-
         Q = utils::vec::get_zeros_3d(horizon + 1, mdp.ns, mdp.na);
         policy = utils::vec::get_zeros_i2d(horizon, mdp.ns);
         V = utils::vec::get_zeros_2d(horizon + 1, mdp.ns);

@@ -6,4 +6,3 @@
 * write tests for value iteration
 * write tests for gridworld
 * write tests for mountain car
-* general framework for experiments?
