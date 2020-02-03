@@ -53,8 +53,8 @@ StepResult<std::vector<double>> MountainCar::step(int action)
     if ((abs(p-lo[position])<1e-10) && (v<0)) v = 0;
 
     bool done = is_terminal(state);
-    double reward = -1;
-    if (done) reward = 0;
+    double reward = 0.0;
+    if (done) reward = 1.0;
 
     state[position] = p;
     state[velocity] = v;

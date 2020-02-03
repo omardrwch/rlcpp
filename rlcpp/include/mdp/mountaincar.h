@@ -27,7 +27,7 @@ namespace mdp
      * 
      *   The terminal state is (goal_position, goal_velocity)
      * 
-     *   A reward of -1 is obtained everywhere, except for the terminal state, where the reward is 0.
+     *   A reward of 0 is obtained everywhere, except for the terminal state, where the reward is 1.
      */
     class MountainCar: public ContinuousMDP
     {

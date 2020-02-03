@@ -1941,7 +1941,7 @@ namespace mdp
             double reward = 0;
             if (reward_smoothness > 0)
             {
-                reward = std::exp(-squared_distance/std::pow(reward_smoothness, 2));
+                reward = std::exp( -squared_distance/ (2*std::pow(reward_smoothness, 2))  );
             }
             else 
             {
