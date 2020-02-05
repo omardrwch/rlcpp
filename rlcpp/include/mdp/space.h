@@ -33,13 +33,13 @@ namespace spaces
         /**
          * @brief Sample a value of the space with a uniform distribution
          */
-        virtual T sample()=0;
+        virtual T sample() {T foo; return foo;};
 
         /**
          * @brief Returns true if x belongs to the space, and false otherwise.
          * @param x 
          */
-        virtual bool contains(T x)=0;
+        virtual bool contains(T x) {return false;};
 
         /**
          * Name of the space (discrete, box, etc.)

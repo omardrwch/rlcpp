@@ -94,6 +94,17 @@ public:
      *  MDP identifier
      */
     std::string id;
+
+    /**
+     * Observation space
+     */
+    spaces::Space<S> observation_space;
+
+     /**
+     * Observation space
+     */   
+    spaces::Space<A> action_space;
+
 };
 }
 
