@@ -50,6 +50,11 @@ namespace spaces
          * Random number generator
          */
         std::mt19937 generator;
+
+        /**
+         * Size of the space (-1 for infinity or undefined )
+         */
+        int n = -1;
     };
 
 
