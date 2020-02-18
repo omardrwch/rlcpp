@@ -61,6 +61,11 @@ namespace spaces
          * Random number generator
          */
         std::mt19937 generator;
+
+        /**
+         * Size of the space (-1 for infinity or undefined )
+         */
+        int n = -1;
     };
 
     /**
@@ -291,19 +296,29 @@ namespace utils
         typedef std::vector<std::vector<double>> vec_2d;
 
         /**
-         * @brief Type for 2d vector (integer)
-         */
-        typedef std::vector<std::vector<int>> ivec_2d;
-
-        /**
          * @brief Type for 3d vector (double)
          */
         typedef std::vector<std::vector<std::vector<double>>> vec_3d;
 
         /**
+         * @brief Type for 4d vector (double)
+         */
+        typedef std::vector<std::vector<std::vector<std::vector<double>>>> vec_4d;
+
+        /**
+         * @brief Type for 2d vector (integer)
+         */
+        typedef std::vector<std::vector<int>> ivec_2d;
+
+        /**
          * @brief Type for 3d vector (integer)
          */
         typedef std::vector<std::vector<std::vector<int>>> ivec_3d;
+
+        /**
+         * @brief Type for 4d vector (integer)
+         */
+        typedef std::vector<std::vector<std::vector<std::vector<int>>>> ivec_4d;
 
         /**
          * @brief Computes the mean of a vector.
@@ -383,9 +398,29 @@ namespace utils
          * @param dim1
          * @param dim2
          * @param dim3
-         * @return vec_3d with dimensions (dim1, dim2, dim3)
+         * @return ivec_3d with dimensions (dim1, dim2, dim3)
          */
         ivec_3d get_zeros_i3d(int dim1, int dim2, int dim3);
+
+        /**
+         * @brief Get 4d vector of integers of dimensions (dim1, dim2, dim3, dim4) filled with zeros
+         * @param dim1
+         * @param dim2
+         * @param dim3
+         * @param dim4
+         * @return ivec_4d with dimensions (dim1, dim2, dim3, dim4)
+         */
+        ivec_4d get_zeros_i4d(int dim1, int dim2, int dim3, int dim4);
+
+        /**
+         * @brief Get 4d vector of double of dimensions (dim1, dim2, dim3, dim4) filled with zeros
+         * @param dim1
+         * @param dim2
+         * @param dim3
+         * @param dim4
+         * @return vec_4d with dimensions (dim1, dim2, dim3, dim4)
+         */
+        vec_4d get_zeros_4d(int dim1, int dim2, int dim3, int dim4);
     }
 }
 
@@ -2338,18 +2373,50 @@ namespace utils
             return result;
         }
 
-        // template <typename T>
-        // void printvec(std::vector<T> vec)
-        // {
-        //     int n = vec.size();
-        //     std::cout << "{";
-        //     for(int i = 0; i < n; i++)
-        //     {
-        //         std::cout << vec[i];
-        //         if (i < n-1){ std::cout << ", ";}
-        //     }
-        //     std::cout << "}" << std::endl;
-        // }
+        ivec_2d get_zeros_i2d(int dim1, int dim2)
+        {
+            utils::vec::ivec_2d vector;
+            for(int ii = 0; ii < dim1; ii++)
+            {
+                vector.push_back(std::vector<int>());
+                for(int jj = 0; jj < dim2; jj++) vector[ii].push_back(0);
+            }
+            return vector;
+        }
+
+        ivec_3d get_zeros_i3d(int dim1, int dim2, int dim3)
+        {
+            utils::vec::ivec_3d vector;
+            for(int ii = 0; ii < dim1; ii++)
+            {
+                vector.push_back(std::vector<std::vector<int>>());
+                for(int jj = 0; jj < dim2; jj++)
+                {
+                    vector[ii].push_back(std::vector<int>());
+                    for(int kk = 0; kk < dim3; kk++) vector[ii][jj].push_back(0);
+                }
+            }
+            return vector;
+        }
+
+        ivec_4d get_zeros_i4d(int dim1, int dim2, int dim3, int dim4)
+        {
+            utils::vec::ivec_4d vector;
+            for(int ii = 0; ii < dim1; ii++)
+            {
+                vector.push_back(std::vector<std::vector<std::vector<int>>>());
+                for(int jj = 0; jj < dim2; jj++)
+                {
+                    vector[ii].push_back(std::vector<std::vector<int>>());
+                    for(int kk = 0; kk < dim3; kk++)
+                    {
+                        vector[ii][jj].push_back(std::vector<int>());
+                        for(int ll = 0; ll < dim4; ll++) vector[ii][jj][kk].push_back(0);
+                    }
+                }
+            }
+            return vector;
+        }
 
         vec_2d get_zeros_2d(int dim1, int dim2)
         {
@@ -2358,17 +2425,6 @@ namespace utils
             {
                 vector.push_back(std::vector<double>());
                 for(int jj = 0; jj < dim2; jj++) vector[ii].push_back(0.0);
-            }
-            return vector;
-        }
-
-        ivec_2d get_zeros_i2d(int dim1, int dim2)
-        {
-            utils::vec::ivec_2d vector;
-            for(int ii = 0; ii < dim1; ii++)
-            {
-                vector.push_back(std::vector<int>());
-                for(int jj = 0; jj < dim2; jj++) vector[ii].push_back(0);
             }
             return vector;
         }
@@ -2388,16 +2444,20 @@ namespace utils
             return vector;
         }
 
-        ivec_3d get_zeros_i3d(int dim1, int dim2, int dim3)
+        vec_4d get_zeros_4d(int dim1, int dim2, int dim3, int dim4)
         {
-            utils::vec::ivec_3d vector;
+            utils::vec::vec_4d vector;
             for(int ii = 0; ii < dim1; ii++)
             {
-                vector.push_back(std::vector<std::vector<int>>());
+                vector.push_back(std::vector<std::vector<std::vector<double>>>());
                 for(int jj = 0; jj < dim2; jj++)
                 {
-                    vector[ii].push_back(std::vector<int>());
-                    for(int kk = 0; kk < dim3; kk++) vector[ii][jj].push_back(0.0);
+                    vector[ii].push_back(std::vector<std::vector<double>>());
+                    for(int kk = 0; kk < dim3; kk++)
+                    {
+                        vector[ii][jj].push_back(std::vector<double>());
+                        for(int ll = 0; ll < dim4; ll++) vector[ii][jj][kk].push_back(0.0);
+                    }
                 }
             }
             return vector;
